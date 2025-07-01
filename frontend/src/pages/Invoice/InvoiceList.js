@@ -10,7 +10,7 @@ const InvoiceList = () => {
   const [searchs, setSearch] = useState(""); // state for search
   const [isLoading, setIsLoading] = useState(true); // state for loading
   const [isEmpty, setIsEmpty] = useState(false);
-  const [filter, setFilter] = useState("month");
+  const [filter, setFilter] = useState("");
   const [customRange, setCustomRange] = useState({ start: "", end: "" });
 
   const str = searchs;

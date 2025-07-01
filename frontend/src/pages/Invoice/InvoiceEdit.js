@@ -173,26 +173,44 @@ function InvoiceEdit() {
         const email = getCellValue(9, 1);
         const phone = getCellValue(11, 1);
 
-        // Book data (rows 17-20)
+        // Book data - find all rows from row 17 until "Grand Total (Rp.)" is found
         const bookList = [];
-        for (let i = 17; i <= 20; i++) {
-          const isbnBook = String(getCellValue(i, 2));
-          const bookName =
-            isbnBook === "" || isbnBook === "-"
-              ? getCellValue(i, 1)
-              : findBooks(isbnBook, books);
+        let row = 17;
+        while (true) {
+          // Check if current row contains "Grand Total (Rp.)"
+          const hasGrandTotal = jsonData[row]?.some((cell) =>
+            String(cell).includes("Grand Total (Rp.)")
+          );
 
-          if (isbnBook) {
+          if (hasGrandTotal) break;
+
+          const isbnBook =
+            getCellValue(row, 2) === "" ||
+            getCellValue(row, 2) === null ||
+            getCellValue(row, 2) === "-"
+              ? "-"
+              : String(getCellValue(row, 2));
+          const qty = getCellValue(row, 3);
+          const price = getCellValue(row, 4);
+          const disc = getCellValue(row, 5);
+
+          // Skip empty rows (where all relevant fields are empty)
+          if (isbnBook || qty || price || disc) {
+            const bookName =
+              isbnBook === "-"
+                ? getCellValue(row, 1)
+                : findBooks(isbnBook, books);
+
             bookList.push({
               bookName,
               isbn: isbnBook,
-              qty: getCellValue(i, 3),
-              price: getCellValue(i, 4),
-              disc: getCellValue(i, 5)
-                ? (parseFloat(getCellValue(i, 5)) * 100).toString()
-                : "",
+              qty: qty,
+              price: price,
+              disc: disc ? (parseFloat(disc) * 100).toString() : "",
             });
           }
+
+          row++;
         }
 
         // Format date (dd/mm/yyyy to yyyy-mm-dd)
@@ -218,8 +236,8 @@ function InvoiceEdit() {
             }
 
             // Format the date components
-            const day = String(date.getDate() - 1).padStart(2, "0");
-            const month = String(date.getMonth() + 2).padStart(2, "0");
+            const day = String(date.getDate() - 3).padStart(2, "0");
+            const month = String(date.getMonth() + 4).padStart(2, "0");
             const year = date.getFullYear();
 
             return `${year}-${month}-${day}`;
