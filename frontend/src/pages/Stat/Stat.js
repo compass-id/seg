@@ -6,7 +6,7 @@ import "./Stat.css";
 
 const Stat = () => {
   const [filteredData, setFilteredData] = useState({});
-  const [filter, setFilter] = useState("month");
+  const [filter, setFilter] = useState("");
   const [bestSellingBooks, setBestSellingBooks] = useState([]);
   const [customRange, setCustomRange] = useState({ start: "", end: "" });
   const [isLoading, setIsLoading] = useState(true);
@@ -276,7 +276,7 @@ const Stat = () => {
             </div>
             <div className="section"></div>
             <div className="section">
-              <h4>Total Statistic</h4>
+              <h4>Statistic</h4>
             </div>
             <hr />
             <div className="section">
@@ -303,7 +303,7 @@ const Stat = () => {
             </div>
             <div className="section"></div>
             <div className="section">
-              <h4>Best Selling Books</h4>
+              <h4>Books Sold</h4>
             </div>
             <hr />
             <div className="section">
