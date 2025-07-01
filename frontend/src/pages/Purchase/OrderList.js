@@ -10,6 +10,8 @@ const OrderList = () => {
   const [searchs, setSearch] = useState(""); // state for search
   const [isLoading, setIsLoading] = useState(true); // state for loading
   const [isEmpty, setIsEmpty] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [customRange, setCustomRange] = useState({ start: "", end: "" });
 
   const str = searchs;
 
@@ -53,13 +55,111 @@ const OrderList = () => {
           const url = `https://seg-server.vercel.app/api/orders`; // modify URL based on backend
           const datas = await axios.get(url); // get datas from URL with axios
           datas.data.length === 0 ? setIsEmpty(true) : setIsEmpty(false);
-          setOrders(datas.data);
+
+          const filterOrdersByDateRange = (orders, range) => {
+            const now = new Date();
+            return orders.filter((order) => {
+              const orderDate = new Date(order.date);
+              switch (range) {
+                case "":
+                  return orderDate;
+                case "today":
+                  return orderDate.toDateString() === now.toDateString();
+                case "week":
+                  return now - orderDate < 7 * 24 * 60 * 60 * 1000;
+                case "month":
+                  return (
+                    orderDate.getMonth() === now.getMonth() &&
+                    orderDate.getFullYear() === now.getFullYear()
+                  );
+                case "lastMonth":
+                  const lastMonthDate = new Date(
+                    now.getFullYear(),
+                    now.getMonth() - 1
+                  );
+                  return (
+                    orderDate.getMonth() === lastMonthDate.getMonth() &&
+                    orderDate.getFullYear() === lastMonthDate.getFullYear()
+                  );
+                case "threeMonths":
+                  return now - orderDate < 90 * 24 * 60 * 60 * 1000;
+                case "sixMonths":
+                  return now - orderDate < 180 * 24 * 60 * 60 * 1000;
+                case "twelveMonths":
+                  return now - orderDate < 365 * 24 * 60 * 60 * 1000;
+                case "year":
+                  return orderDate.getFullYear() === now.getFullYear();
+                case "lastYear":
+                  return orderDate.getFullYear() === now.getFullYear() - 1;
+                case "custom":
+                  const { start, end } = customRange;
+                  return (
+                    orderDate >= new Date(start) && orderDate <= new Date(end)
+                  );
+                default:
+                  return false;
+              }
+            });
+          };
+
+          const filteredOrders = filterOrdersByDateRange(datas.data, filter);
+
+          setOrders(filteredOrders);
           setIsLoading(false);
         } else {
           const url = `https://seg-server.vercel.app/api/orders/key/${search}`; // modify URL based on backend
           const datas = await axios.get(url); // get datas from URL with axios
           datas.data.length === 0 ? setIsEmpty(true) : setIsEmpty(false);
-          setOrders(datas.data);
+
+          const filterOrdersByDateRange = (orders, range) => {
+            const now = new Date();
+            return orders.filter((order) => {
+              const orderDate = new Date(order.date);
+              switch (range) {
+                case "":
+                  return orderDate;
+                case "today":
+                  return orderDate.toDateString() === now.toDateString();
+                case "week":
+                  return now - orderDate < 7 * 24 * 60 * 60 * 1000;
+                case "month":
+                  return (
+                    orderDate.getMonth() === now.getMonth() &&
+                    orderDate.getFullYear() === now.getFullYear()
+                  );
+                case "lastMonth":
+                  const lastMonthDate = new Date(
+                    now.getFullYear(),
+                    now.getMonth() - 1
+                  );
+                  return (
+                    orderDate.getMonth() === lastMonthDate.getMonth() &&
+                    orderDate.getFullYear() === lastMonthDate.getFullYear()
+                  );
+                case "threeMonths":
+                  return now - orderDate < 90 * 24 * 60 * 60 * 1000;
+                case "sixMonths":
+                  return now - orderDate < 180 * 24 * 60 * 60 * 1000;
+                case "twelveMonths":
+                  return now - orderDate < 365 * 24 * 60 * 60 * 1000;
+                case "year":
+                  return orderDate.getFullYear() === now.getFullYear();
+                case "lastYear":
+                  return orderDate.getFullYear() === now.getFullYear() - 1;
+                case "custom":
+                  const { start, end } = customRange;
+                  return (
+                    orderDate >= new Date(start) && orderDate <= new Date(end)
+                  );
+                default:
+                  return false;
+              }
+            });
+          };
+
+          const filteredOrders = filterOrdersByDateRange(datas.data, filter);
+
+          setOrders(filteredOrders);
           setIsLoading(false);
         }
       } catch (error) {
@@ -68,7 +168,7 @@ const OrderList = () => {
     };
 
     getOrders();
-  }, [search]); // dependency array with only `getOrders`
+  }, [search, filter, customRange]); // dependency array with only `getOrders`
 
   function formatDate(dateString) {
     // Create a new Date object from the input string
@@ -119,32 +219,63 @@ const OrderList = () => {
           type="button"
           onClick={() => salesSet("All", "Cahyo", "Tulus", "Angga")}
           id="All"
-          className="active"
-        >
+          className="active">
           All
         </button>
         <button
           type="button"
           onClick={() => salesSet("Angga", "Cahyo", "Tulus", "All")}
-          id="Angga"
-        >
+          id="Angga">
           Angga
         </button>
         <button
           type="button"
           onClick={() => salesSet("Cahyo", "Angga", "Tulus", "All")}
-          id="Cahyo"
-        >
+          id="Cahyo">
           Cahyo
         </button>
         <button
           type="button"
           onClick={() => salesSet("Tulus", "Cahyo", "Angga", "All")}
-          id="Tulus"
-        >
+          id="Tulus">
           Tulus
         </button>
       </div>
+      <div className="section">
+        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <option value="">All Time</option>
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="lastMonth">Last 1 Month</option>
+          <option value="threeMonths">Last 3 Months</option>
+          <option value="sixMonths">Last 6 Months</option>
+          <option value="twelveMonths">Last 12 Months</option>
+          <option value="year">This Year</option>
+          <option value="lastYear">Last Year</option>
+          <option value="custom">Custom Range</option>
+        </select>
+      </div>
+      {filter === "custom" && (
+        <div className="date-range-container section">
+          <input
+            type="date"
+            value={customRange.start}
+            onChange={(e) =>
+              setCustomRange({ ...customRange, start: e.target.value })
+            }
+          />
+          <span>to</span>
+          <input
+            type="date"
+            value={customRange.end}
+            onChange={(e) =>
+              setCustomRange({ ...customRange, end: e.target.value })
+            }
+          />
+        </div>
+      )}
+      <hr />
       {isLoading ? (
         <div className="section">Loading Order Database...</div> // display status when loading
       ) : isEmpty ? (
@@ -175,14 +306,12 @@ const OrderList = () => {
                         onClick={() =>
                           (window.location.href = `https://github.com/competech-id/docs/raw/master/Order/${order.serie}.xlsx`)
                         }
-                        download
-                      >
+                        download>
                         GET XLSX
                       </button>
                       <button
                         className="btn"
-                        onClick={() => navigate(`/order-edit/${order._id}`)}
-                      >
+                        onClick={() => navigate(`/order-edit/${order._id}`)}>
                         EDIT
                       </button>
                     </p>

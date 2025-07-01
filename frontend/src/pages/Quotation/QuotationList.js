@@ -10,6 +10,8 @@ const QuotationList = () => {
   const [searchs, setSearch] = useState(""); // state for search
   const [isLoading, setIsLoading] = useState(true); // state for loading
   const [isEmpty, setIsEmpty] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [customRange, setCustomRange] = useState({ start: "", end: "" });
 
   const str = searchs;
 
@@ -53,13 +55,119 @@ const QuotationList = () => {
           const url = `https://seg-server.vercel.app/api/quotations`; // modify URL based on backend
           const datas = await axios.get(url); // get datas from URL with axios
           datas.data.length === 0 ? setIsEmpty(true) : setIsEmpty(false);
-          setQuotations(datas.data);
+
+          const filterQuotationsByDateRange = (quotations, range) => {
+            const now = new Date();
+            return quotations.filter((quotation) => {
+              const quotationDate = new Date(quotation.date);
+              switch (range) {
+                case "":
+                  return quotationDate;
+                case "today":
+                  return quotationDate.toDateString() === now.toDateString();
+                case "week":
+                  return now - quotationDate < 7 * 24 * 60 * 60 * 1000;
+                case "month":
+                  return (
+                    quotationDate.getMonth() === now.getMonth() &&
+                    quotationDate.getFullYear() === now.getFullYear()
+                  );
+                case "lastMonth":
+                  const lastMonthDate = new Date(
+                    now.getFullYear(),
+                    now.getMonth() - 1
+                  );
+                  return (
+                    quotationDate.getMonth() === lastMonthDate.getMonth() &&
+                    quotationDate.getFullYear() === lastMonthDate.getFullYear()
+                  );
+                case "threeMonths":
+                  return now - quotationDate < 90 * 24 * 60 * 60 * 1000;
+                case "sixMonths":
+                  return now - quotationDate < 180 * 24 * 60 * 60 * 1000;
+                case "twelveMonths":
+                  return now - quotationDate < 365 * 24 * 60 * 60 * 1000;
+                case "year":
+                  return quotationDate.getFullYear() === now.getFullYear();
+                case "lastYear":
+                  return quotationDate.getFullYear() === now.getFullYear() - 1;
+                case "custom":
+                  const { start, end } = customRange;
+                  return (
+                    quotationDate >= new Date(start) &&
+                    quotationDate <= new Date(end)
+                  );
+                default:
+                  return false;
+              }
+            });
+          };
+
+          const filteredQuotations = filterQuotationsByDateRange(
+            datas.data,
+            filter
+          );
+
+          setQuotations(filteredQuotations);
           setIsLoading(false);
         } else {
           const url = `https://seg-server.vercel.app/api/quotations/key/${search}`; // modify URL based on backend
           const datas = await axios.get(url); // get datas from URL with axios
           datas.data.length === 0 ? setIsEmpty(true) : setIsEmpty(false);
-          setQuotations(datas.data);
+
+          const filterQuotationsByDateRange = (quotations, range) => {
+            const now = new Date();
+            return quotations.filter((quotation) => {
+              const quotationDate = new Date(quotation.date);
+              switch (range) {
+                case "":
+                  return quotationDate;
+                case "today":
+                  return quotationDate.toDateString() === now.toDateString();
+                case "week":
+                  return now - quotationDate < 7 * 24 * 60 * 60 * 1000;
+                case "month":
+                  return (
+                    quotationDate.getMonth() === now.getMonth() &&
+                    quotationDate.getFullYear() === now.getFullYear()
+                  );
+                case "lastMonth":
+                  const lastMonthDate = new Date(
+                    now.getFullYear(),
+                    now.getMonth() - 1
+                  );
+                  return (
+                    quotationDate.getMonth() === lastMonthDate.getMonth() &&
+                    quotationDate.getFullYear() === lastMonthDate.getFullYear()
+                  );
+                case "threeMonths":
+                  return now - quotationDate < 90 * 24 * 60 * 60 * 1000;
+                case "sixMonths":
+                  return now - quotationDate < 180 * 24 * 60 * 60 * 1000;
+                case "twelveMonths":
+                  return now - quotationDate < 365 * 24 * 60 * 60 * 1000;
+                case "year":
+                  return quotationDate.getFullYear() === now.getFullYear();
+                case "lastYear":
+                  return quotationDate.getFullYear() === now.getFullYear() - 1;
+                case "custom":
+                  const { start, end } = customRange;
+                  return (
+                    quotationDate >= new Date(start) &&
+                    quotationDate <= new Date(end)
+                  );
+                default:
+                  return false;
+              }
+            });
+          };
+
+          const filteredQuotations = filterQuotationsByDateRange(
+            datas.data,
+            filter
+          );
+
+          setQuotations(filteredQuotations);
           setIsLoading(false);
         }
       } catch (error) {
@@ -67,7 +175,7 @@ const QuotationList = () => {
       }
     };
     getQuotations();
-  }, [search]); // dependency array with only `getQuotations`
+  }, [search, filter, customRange]); // dependency array with only `getQuotations`
 
   function formatDate(dateString) {
     // Create a new Date object from the input string
@@ -119,32 +227,63 @@ const QuotationList = () => {
           type="button"
           onClick={() => salesSet("All", "Cahyo", "Tulus", "Angga")}
           id="All"
-          className="active"
-        >
+          className="active">
           All
         </button>
         <button
           type="button"
           onClick={() => salesSet("Angga", "Cahyo", "Tulus", "All")}
-          id="Angga"
-        >
+          id="Angga">
           Angga
         </button>
         <button
           type="button"
           onClick={() => salesSet("Cahyo", "Angga", "Tulus", "All")}
-          id="Cahyo"
-        >
+          id="Cahyo">
           Cahyo
         </button>
         <button
           type="button"
           onClick={() => salesSet("Tulus", "Cahyo", "Angga", "All")}
-          id="Tulus"
-        >
+          id="Tulus">
           Tulus
         </button>
       </div>
+      <div className="section">
+        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <option value="">All Time</option>
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="lastMonth">Last 1 Month</option>
+          <option value="threeMonths">Last 3 Months</option>
+          <option value="sixMonths">Last 6 Months</option>
+          <option value="twelveMonths">Last 12 Months</option>
+          <option value="year">This Year</option>
+          <option value="lastYear">Last Year</option>
+          <option value="custom">Custom Range</option>
+        </select>
+      </div>
+      {filter === "custom" && (
+        <div className="date-range-container section">
+          <input
+            type="date"
+            value={customRange.start}
+            onChange={(e) =>
+              setCustomRange({ ...customRange, start: e.target.value })
+            }
+          />
+          <span>to</span>
+          <input
+            type="date"
+            value={customRange.end}
+            onChange={(e) =>
+              setCustomRange({ ...customRange, end: e.target.value })
+            }
+          />
+        </div>
+      )}
+      <hr />
       {isLoading ? (
         <div className="section">Loading Quotation Database...</div> // display status when loading
       ) : isEmpty ? (
@@ -175,16 +314,14 @@ const QuotationList = () => {
                         onClick={() =>
                           (window.location.href = `https://github.com/competech-id/docs/raw/master/Quotation/${quotation.serie}.xlsx`)
                         }
-                        download
-                      >
+                        download>
                         GET XLSX
                       </button>
                       <button
                         className="btn"
                         onClick={() =>
                           navigate(`/quotation-edit/${quotation._id}`)
-                        }
-                      >
+                        }>
                         EDIT
                       </button>
                     </p>
