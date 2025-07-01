@@ -10,7 +10,7 @@ const InvoiceList = () => {
   const [searchs, setSearch] = useState(""); // state for search
   const [isLoading, setIsLoading] = useState(true); // state for loading
   const [isEmpty, setIsEmpty] = useState(false);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("month");
   const [customRange, setCustomRange] = useState({ start: "", end: "" });
 
   const str = searchs;
@@ -229,29 +229,25 @@ const InvoiceList = () => {
           type="button"
           onClick={() => salesSet("All", "Cahyo", "Tulus", "Angga")}
           id="All"
-          className="active"
-        >
+          className="active">
           All
         </button>
         <button
           type="button"
           onClick={() => salesSet("Angga", "Cahyo", "Tulus", "All")}
-          id="Angga"
-        >
+          id="Angga">
           Angga
         </button>
         <button
           type="button"
           onClick={() => salesSet("Cahyo", "Angga", "Tulus", "All")}
-          id="Cahyo"
-        >
+          id="Cahyo">
           Cahyo
         </button>
         <button
           type="button"
           onClick={() => salesSet("Tulus", "Cahyo", "Angga", "All")}
-          id="Tulus"
-        >
+          id="Tulus">
           Tulus
         </button>
       </div>
@@ -320,14 +316,14 @@ const InvoiceList = () => {
                         onClick={() =>
                           (window.location.href = `https://github.com/competech-id/docs/raw/master/Invoice/${invoice.serie}.xlsx`)
                         }
-                        download
-                      >
+                        download>
                         GET XLSX
                       </button>
                       <button
                         className="btn"
-                        onClick={() => navigate(`/invoice-edit/${invoice._id}`)}
-                      >
+                        onClick={() =>
+                          navigate(`/invoice-edit/${invoice._id}`)
+                        }>
                         EDIT
                       </button>
                     </p>

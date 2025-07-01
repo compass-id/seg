@@ -193,7 +193,7 @@ function InvoiceAdd() {
         // Book data (rows 17-20)
         const bookList = [];
         for (let i = 17; i <= 20; i++) {
-          const isbnBook = getCellValue(i, 2);
+          const isbnBook = String(getCellValue(i, 2));
           const bookName =
             isbnBook === "" || isbnBook === "-"
               ? getCellValue(i, 1)

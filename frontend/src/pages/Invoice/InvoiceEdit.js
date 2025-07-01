@@ -176,7 +176,7 @@ function InvoiceEdit() {
         // Book data (rows 17-20)
         const bookList = [];
         for (let i = 17; i <= 20; i++) {
-          const isbnBook = getCellValue(i, 2);
+          const isbnBook = String(getCellValue(i, 2));
           const bookName =
             isbnBook === "" || isbnBook === "-"
               ? getCellValue(i, 1)
@@ -314,7 +314,7 @@ function InvoiceEdit() {
     <>
       <div className="section">
         <div className="section headline">
-          <h4>Add Invoice</h4>
+          <h4>Edit Invoice</h4>
           <button onClick={() => navigate(`/invoices`)} className="btn">
             See All Invoices
           </button>
