@@ -1,0 +1,116 @@
+.chart-container {
+  width: 100%;
+  height: 300px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.sales-table,
+.books-table {
+  width: 100%;
+  border: 1px solid #111;
+  border-collapse: collapse;
+}
+
+.sales-table th,
+.sales-table td,
+.books-table th,
+.books-table td {
+  border: 1px solid #111;
+  padding: 8px;
+}
+
+.sales-table tr:hover,
+.books-table tr:hover {
+  background: #ddd;
+}
+
+.sales-table th,
+.books-table th {
+  background: #111;
+  color: #fff;
+  text-align: left;
+  font-weight: normal;
+}
+
+@media (max-width: 768px) {
+  .chart-container {
+    height: 350px;
+  }
+
+  select {
+    width: 95%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+  }
+
+  select option {
+    width: 95%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    padding: 5px;
+  }
+
+  .books-table {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: scroll;
+    white-space: nowrap;
+    border: 1px solid #111;
+  }
+
+  .sales-table {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: scroll;
+    white-space: nowrap;
+    border: 1px solid #111;
+  }
+}
+
+select {
+  width: 98%;
+  height: auto;
+  display: block;
+  overflow: hidden;
+  padding: 5px;
+}
+
+select option {
+  width: 98%;
+  height: auto;
+  display: block;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.date-range-container {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: hidden;
+  text-align: center;
+}
+
+.date-range-container span {
+  width: 10%;
+  height: auto;
+  display: inline-block;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.date-range-container input {
+  width: 45%;
+  height: auto;
+  display: inline-block;
+  overflow: hidden;
+  padding: 5px;
+}
