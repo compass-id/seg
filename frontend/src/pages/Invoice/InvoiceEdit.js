@@ -197,7 +197,7 @@ function InvoiceEdit() {
           // Skip empty rows (where all relevant fields are empty)
           if (qty !== "" && price !== "") {
             const bookName =
-              isbnBook === "-"
+              isbnBook === ""
                 ? getCellValue(row, 1)
                 : findBooks(isbnBook, books);
 
