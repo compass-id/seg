@@ -3,6 +3,7 @@ import {
   getBooks,
   getBookById,
   getBookByKey,
+  getIsbnByName,
   updBook,
   delBook,
   setBook,
@@ -16,6 +17,7 @@ const bookRouter = express.Router();
 
 // set the routes
 bookRouter.get("/api/books", getBooks);
+bookRouter.get("/api/books/isbn/:name", getIsbnByName);
 bookRouter.get("/api/books/id/:id", getBookById);
 bookRouter.get("/api/books/key/:key", getBookByKey);
 bookRouter.post("/api/books", setBook);

@@ -35,6 +35,22 @@ export const getBookById = asyncHandler(async (req, res) => {
   }
 });
 
+// book isbn
+// get a book's ISBN by name (exact match)
+export const getIsbnByName = asyncHandler(async (req, res) => {
+  try {
+    const book = await Book.findOne({ name: req.params.name });
+    if (!book) {
+      res.status(404);
+      throw new Error(`Cannot find book with name: ${req.params.name}`);
+    }
+    res.status(200).json({ isbn: book.isbn });
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message);
+  }
+});
+
 // get a book by key
 export const getBookByKey = asyncHandler(async (req, res) => {
   try {
