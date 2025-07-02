@@ -205,14 +205,14 @@ function InvoiceAdd() {
             getCellValue(row, 2) === "" ||
             getCellValue(row, 2) === null ||
             getCellValue(row, 2) === "-"
-              ? "-"
+              ? ""
               : String(getCellValue(row, 2));
           const qty = getCellValue(row, 3);
           const price = getCellValue(row, 4);
           const disc = getCellValue(row, 5);
 
           // Skip empty rows (where all relevant fields are empty)
-          if (isbnBook || qty || price || disc) {
+          if (isbnBook !== "" && qty !== "" && price !== "") {
             const bookName =
               isbnBook === "-"
                 ? getCellValue(row, 1)
