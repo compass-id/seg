@@ -44,7 +44,7 @@ export const getIsbnByName = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with name: ${req.params.name}`);
     }
-    res.status(200).json({ isbn: book.isbn });
+    res.status(200).json(book.isbn);
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
