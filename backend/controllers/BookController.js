@@ -59,7 +59,7 @@ export const getNameByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-    res.status(200).json({ name: book.name });
+    res.status(200).json(book.name);
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
