@@ -169,7 +169,7 @@ function InvoiceEdit() {
         const customerName = getCellValue(6, 1);
         const invoiceNumber = getCellValue(4, 4);
         const invoiceDate = getCellValue(4, 6);
-        const companyAddress = getCellValue(23, 0);
+        const companyAddress = getCellValue(6, 3);
         const email = getCellValue(9, 1);
         const phone = getCellValue(11, 1);
 
