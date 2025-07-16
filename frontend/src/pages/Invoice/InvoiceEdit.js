@@ -5,8 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
 
 function InvoiceEdit() {
-  // Fetches latest invoice count for serie generation
-
   const [books, setBooks] = useState([]);
 
   const [invoiceData, setInvoiceData] = useState({
@@ -27,11 +25,11 @@ function InvoiceEdit() {
   // create Invoice deleter function
   const delInvoice = async () => {
     try {
-      await axios.delete(`https://seg-server.vercel.app/api/invoices/id/${id}`); // modify URL based on backend
+      await axios.delete(`https://seg-server.vercel.app/api/invoices/id/${id}`);
       // navigate to main page
       navigate(`/invoices`);
     } catch (error) {
-      window.alert(error.message); // display error message
+      window.alert(error.message);
     }
   };
 
@@ -39,10 +37,48 @@ function InvoiceEdit() {
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    setInvoiceData({
-      ...invoiceData,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target; // Destructure name and value
+
+    if (name === "date") {
+      let formattedValue = '';
+      const cleanValue = value.replace(/\D/g, ''); // Remove non-digits
+
+      // Check if the pasted value already has slashes (e.g., from Excel import or manual paste)
+      const hasSlashes = value.includes('/');
+
+      if (hasSlashes) {
+        // If slashes are present, assume it's a pre-formatted paste
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+          formattedValue = value;
+        } else {
+          // If it has slashes but doesn't match dd/mm/yyyy, clear or handle as an error
+          formattedValue = ''; // Or show an error message
+        }
+      } else {
+        // Auto-add slashes for typing
+        for (let i = 0; i < cleanValue.length; i++) {
+          if (i === 2 || i === 4) {
+            formattedValue += '/';
+          }
+          formattedValue += cleanValue[i];
+        }
+
+        // Limit to dd/mm/yyyy length
+        if (formattedValue.length > 10) {
+          formattedValue = formattedValue.substring(0, 10);
+        }
+      }
+
+      setInvoiceData({
+        ...invoiceData,
+        [name]: formattedValue,
+      });
+    } else {
+      setInvoiceData({
+        ...invoiceData,
+        [name]: value,
+      });
+    }
   };
 
   const handleBookChange = (index) => (event) => {
@@ -70,7 +106,6 @@ function InvoiceEdit() {
             index === i
               ? {
                   ...book,
-
                   bookName: selectedBook.name,
                   isbn: selectedBook.isbn,
                   price: selectedBook.bookPrice,
@@ -168,7 +203,7 @@ function InvoiceEdit() {
         // Customer information
         const customerName = getCellValue(6, 1);
         const invoiceNumber = getCellValue(4, 4);
-        const invoiceDate = getCellValue(4, 6);
+        const invoiceDate = getCellValue(4, 6); // This will be in Excel's date format
         const companyAddress = getCellValue(6, 3);
         const email = getCellValue(9, 1);
         const phone = getCellValue(11, 1);
@@ -213,44 +248,28 @@ function InvoiceEdit() {
           row++;
         }
 
-        // Format date (dd/mm/yyyy to yyyy-mm-dd)
-        const formattedDate = (serial) => {
-          // Check if input is a valid number
-          if (typeof serial !== "number" || isNaN(serial) || serial < 1) {
-            const [day, month, year] = serial.split("/");
-            return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-          } else {
-            // Excel date system considers 1900 as a leap year (incorrectly)
-            const excelEpoch = new Date(1900, 0, 1);
+        // Convert Excel date number to JavaScript Date object, then format to dd/mm/yyyy
+        let formattedInvoiceDate = "";
+        if (typeof invoiceDate === 'number') {
+          // Excel dates are numbers representing days since 1900-01-01
+          // Subtract 1 because Excel's epoch is 1900-01-01, JS is 1970-01-01, and Excel counts 1900-02-29 which didn't exist.
+          // The 25569 is the number of days between 1900-01-01 and 1970-01-01 plus one day for Excel's 1900 leap year bug
+          const date = new Date(Math.round((invoiceDate - 25569) * 86400 * 1000));
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const year = date.getFullYear();
+          formattedInvoiceDate = `${day}/${month}/${year}`;
+        } else if (typeof invoiceDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)) {
+            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy
+        } else {
+            formattedInvoiceDate = ""; // Handle other formats or invalid dates from Excel
+        }
 
-            // Adjust for Excel's incorrect leap year assumption
-            const offset = serial <= 60 ? serial - 1 : serial;
-
-            // Calculate the date
-            const date = new Date(excelEpoch);
-            date.setDate(date.getDate() + offset - 1);
-
-            // For serial numbers >= 60, we need to subtract 1 more day because Excel has an extra day (Feb 29, 1900)
-            if (serial >= 60) {
-              date.setDate(date.getDate() - 1);
-            }
-
-            // Format the date components
-            const day = String(date.getDate() - 3).padStart(2, "0");
-            const month = String(date.getMonth() + 4).padStart(2, "0");
-            const year = date.getFullYear();
-
-            return `${year}-${month}-${day}`;
-          }
-        };
-
-        const invoiceDt = invoiceDate;
-        const reformat = formattedDate(invoiceDt);
 
         // 6. Update state
         setInvoiceData({
           serie: invoiceNumber,
-          date: reformat,
+          date: formattedInvoiceDate, // Use the reformatted date
           name: customerName.split("-")[0]?.trim(),
           company: customerName.split("-")[1]?.trim(),
           email: email,
@@ -307,7 +326,31 @@ function InvoiceEdit() {
         );
 
         // input all the datas into useState
-        setInvoiceData(res.data);
+        // Format the date from the fetched data to dd/mm/yyyy for display
+        let fetchedDate = res.data.date;
+        if (fetchedDate && !/^\d{2}\/\d{2}\/\d{4}$/.test(fetchedDate)) {
+            // Assuming fetchedDate from backend might be in YYYY-MM-DD or other formats
+            // Convert to Date object, then to dd/mm/yyyy
+            try {
+                const dateObj = new Date(fetchedDate);
+                if (!isNaN(dateObj)) { // Check if the date object is valid
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    const year = dateObj.getFullYear();
+                    fetchedDate = `${day}/${month}/${year}`;
+                } else {
+                    fetchedDate = ""; // Invalid date, clear it
+                }
+            } catch (parseError) {
+                fetchedDate = ""; // Error parsing, clear it
+            }
+        }
+
+
+        setInvoiceData({
+          ...res.data,
+          date: fetchedDate,
+        });
       } catch (error) {
         console.log(error); // display error message
       }
@@ -358,18 +401,20 @@ function InvoiceEdit() {
                 value={invoiceData.serie}
                 onChange={handleChange}
                 placeholder="No."
+                readOnly // Added readOnly as serie is likely generated
               />
             </div>
             <div className="field">
               <label className="label">Date</label>
               <input
-                type="date"
+                type="text"
                 className="input"
                 id="date"
                 name="date"
                 value={invoiceData.date}
                 onChange={handleChange}
-                placeholder="Date"
+                maxLength={10}
+                placeholder="dd/mm/yyyy"
               />
             </div>
             <div className="field">
@@ -475,7 +520,7 @@ function InvoiceEdit() {
                         <option value="">--- Select Book ---</option>
                         <option value="-">[Custom Book Name]</option>
                         {books.map((item, i) => (
-                          <option value={item.isbn}>{item.name}</option>
+                          <option key={i} value={item.isbn}>{item.name}</option>
                         ))}
                       </select>
                     </>
@@ -507,6 +552,7 @@ function InvoiceEdit() {
                   <label className="label">Quantity</label>
                   <input
                     type="text"
+                    className="input"
                     id={`qty-${index}`}
                     name={`qty`}
                     value={book.qty}
@@ -518,6 +564,7 @@ function InvoiceEdit() {
                   <label className="label">Discount</label>
                   <input
                     type="text"
+                    className="input"
                     id={`disc-${index}`}
                     name={`disc`}
                     value={book.disc}

@@ -6,8 +6,7 @@ import * as XLSX from "xlsx";
 function InvoiceAdd() {
   const [books, setBooks] = useState([]);
   const [invoiceData, setInvoiceData] = useState({
-    serie: "",
-    date: "",
+    date: "", // Initialize date to an empty string
     name: "",
     company: "",
     email: "",
@@ -15,6 +14,7 @@ function InvoiceAdd() {
     address: "",
     sales: "",
     bookList: [],
+    serie: "", // Initialize serie as well
   });
 
   const handleReset = () => {
@@ -28,6 +28,7 @@ function InvoiceAdd() {
       address: "",
       sales: "",
       bookList: [],
+      serie: generateSerie(0), // Reset serie on reset
     });
   };
 
@@ -42,10 +43,48 @@ function InvoiceAdd() {
   const navigate = useNavigate();
 
   const handleChange = (event) => {
-    setInvoiceData({
-      ...invoiceData,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+
+    if (name === "date") {
+      let formattedValue = '';
+      const cleanValue = value.replace(/\D/g, ''); // Remove non-digits
+
+      // Check if the pasted value already has slashes (e.g., from Excel import or manual paste)
+      const hasSlashes = value.includes('/');
+
+      if (hasSlashes) {
+        // If slashes are present, assume it's a pre-formatted paste
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+          formattedValue = value;
+        } else {
+          // If it has slashes but doesn't match dd/mm/yyyy, clear or handle as an error
+          formattedValue = ''; // Or show an error message
+        }
+      } else {
+        // Auto-add slashes for typing
+        for (let i = 0; i < cleanValue.length; i++) {
+          if (i === 2 || i === 4) {
+            formattedValue += '/';
+          }
+          formattedValue += cleanValue[i];
+        }
+
+        // Limit to dd/mm/yyyy length
+        if (formattedValue.length > 10) {
+          formattedValue = formattedValue.substring(0, 10);
+        }
+      }
+
+      setInvoiceData({
+        ...invoiceData,
+        [name]: formattedValue,
+      });
+    } else {
+      setInvoiceData({
+        ...invoiceData,
+        [name]: value,
+      });
+    }
   };
 
   const handleBookChange = (index) => (event) => {
@@ -57,8 +96,8 @@ function InvoiceAdd() {
       if (value === null || value === "" || value === "-") {
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
-        hed.style = "display: none";
-        bame.style = "display: block";
+        if (hed) hed.style = "display: none";
+        if (bame) bame.style = "display: block";
 
         setInvoiceData({
           ...invoiceData,
@@ -74,8 +113,8 @@ function InvoiceAdd() {
       } else if (selectedBook) {
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
-        hed.style = "display: block";
-        bame.style = "display: none";
+        if (hed) hed.style = "display: block";
+        if (bame) bame.style = "display: none";
 
         setInvoiceData({
           ...invoiceData,
@@ -93,8 +132,8 @@ function InvoiceAdd() {
       } else if (!selectedBook) {
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
-        hed.style = "display: none";
-        bame.style = "display: block";
+        if (hed) hed.style = "display: none";
+        if (bame) bame.style = "display: block";
 
         setInvoiceData({
           ...invoiceData,
@@ -185,7 +224,7 @@ function InvoiceAdd() {
         // Customer information
         const customerName = getCellValue(6, 1);
         const invoiceNumber = getCellValue(4, 4);
-        const invoiceDate = getCellValue(4, 6);
+        const invoiceDate = getCellValue(4, 6); // This will be in Excel's date format
         const companyAddress = getCellValue(6, 3);
         const email = getCellValue(9, 1);
         const phone = getCellValue(11, 1);
@@ -230,44 +269,26 @@ function InvoiceAdd() {
           row++;
         }
 
-        // Format date (dd/mm/yyyy to yyyy-mm-dd)
-        const formattedDate = (serial) => {
-          // Check if input is a valid number
-          if (typeof serial !== "number" || isNaN(serial) || serial < 1) {
-            const [day, month, year] = serial.split("/");
-            return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-          } else {
-            // Excel date system considers 1900 as a leap year (incorrectly)
-            const excelEpoch = new Date(1900, 0, 1);
-
-            // Adjust for Excel's incorrect leap year assumption
-            const offset = serial <= 60 ? serial - 1 : serial;
-
-            // Calculate the date
-            const date = new Date(excelEpoch);
-            date.setDate(date.getDate() + offset - 1);
-
-            // For serial numbers >= 60, we need to subtract 1 more day because Excel has an extra day (Feb 29, 1900)
-            if (serial >= 60) {
-              date.setDate(date.getDate() - 1);
-            }
-
-            // Format the date components
-            const day = String(date.getDate() - 3).padStart(2, "0");
-            const month = String(date.getMonth() + 4).padStart(2, "0");
-            const year = date.getFullYear();
-
-            return `${year}-${month}-${day}`;
-          }
-        };
-
-        const invoiceDt = invoiceDate;
-        const reformat = formattedDate(invoiceDt);
+        // Convert Excel date number to JavaScript Date object, then format
+        let formattedInvoiceDate = "";
+        if (typeof invoiceDate === 'number') {
+          // Excel dates are numbers representing days since 1900-01-01
+          // Subtract 1 because Excel's epoch is 1900-01-01, JS is 1970-01-01, and Excel counts 1900-02-29 which didn't exist.
+          const date = new Date(Math.round((invoiceDate - 25569) * 86400 * 1000));
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const year = date.getFullYear();
+          formattedInvoiceDate = `${day}/${month}/${year}`;
+        } else if (typeof invoiceDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)) {
+            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy
+        } else {
+            formattedInvoiceDate = ""; // Handle other formats or invalid dates from Excel
+        }
 
         // 6. Update state
         setInvoiceData({
           serie: invoiceNumber,
-          date: reformat,
+          date: formattedInvoiceDate, // Use the reformatted date
           name: customerName.split("-")[0]?.trim(),
           company: customerName.split("-")[1]?.trim(),
           email: email,
@@ -324,10 +345,10 @@ function InvoiceAdd() {
         const count = filtered.length;
         const serie = generateSerie(count);
 
-        setInvoiceData({
-          ...invoiceData,
+        setInvoiceData((prevData) => ({
+          ...prevData,
           serie: serie,
-        });
+        }));
       } catch (error) {
         console.error("Error fetching latest invoice count:", error);
       }
@@ -379,18 +400,20 @@ function InvoiceAdd() {
                 value={invoiceData.serie}
                 onChange={handleChange}
                 placeholder="No."
+                readOnly // Make it read-only as it's generated
               />
             </div>
             <div className="field">
               <label className="label">Date</label>
-              <input
-                type="date"
+             <input
+                type="text"
                 className="input"
                 id="date"
                 name="date"
                 value={invoiceData.date}
                 onChange={handleChange}
-                placeholder="Date"
+                maxLength={10}
+                placeholder="dd/mm/yyyy"
               />
             </div>
             <div className="field">
@@ -524,6 +547,7 @@ function InvoiceAdd() {
                   <label className="label">Quantity</label>
                   <input
                     type="text"
+                    className="input"
                     id={`qty-${index}`}
                     name={`qty`}
                     value={book.qty}
@@ -535,6 +559,7 @@ function InvoiceAdd() {
                   <label className="label">Discount</label>
                   <input
                     type="text"
+                    className="input"
                     id={`disc-${index}`}
                     name={`disc`}
                     value={book.disc}
