@@ -9,7 +9,7 @@ function InvoiceEdit() {
 
   const [invoiceData, setInvoiceData] = useState({
     serie: "",
-    date: "",
+    date: "", // This will hold the dd/mm/yyyy format for the input
     name: "",
     company: "",
     email: "",
@@ -19,25 +19,20 @@ function InvoiceEdit() {
     bookList: [],
   });
 
-  // get id from parameter
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  // create Invoice deleter function
   const delInvoice = async () => {
     try {
       await axios.delete(`https://seg-server.vercel.app/api/invoices/id/${id}`);
-      // navigate to main page
       navigate(`/invoices`);
     } catch (error) {
       window.alert(error.message);
     }
   };
 
-  // setting up useNavigate
-  const navigate = useNavigate();
-
   const handleChange = (event) => {
-    const { name, value } = event.target; // Destructure name and value
+    const { name, value } = event.target;
 
     if (name === "date") {
       let formattedValue = '';
@@ -48,7 +43,7 @@ function InvoiceEdit() {
 
       if (hasSlashes) {
         // If slashes are present, assume it's a pre-formatted paste
-        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) { // Validate dd/mm/yyyy format
           formattedValue = value;
         } else {
           // If it has slashes but doesn't match dd/mm/yyyy, clear or handle as an error
@@ -57,7 +52,7 @@ function InvoiceEdit() {
       } else {
         // Auto-add slashes for typing
         for (let i = 0; i < cleanValue.length; i++) {
-          if (i === 2 || i === 4) {
+          if (i === 2 || i === 4) { // Add slash after day and month
             formattedValue += '/';
           }
           formattedValue += cleanValue[i];
@@ -174,45 +169,35 @@ function InvoiceEdit() {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        // 1. Parse the Excel file
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: "array" });
-
-        // 2. Get the first worksheet
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-
-        // 3. Convert to JSON with header row
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
           defval: "",
         });
 
-        // 4. Validate basic structure
         if (jsonData.length < 24) {
           throw new Error(
             "The Excel file doesn't match the expected format. Please use the correct template."
           );
         }
 
-        // 5. Extract data with safety checks
         const getCellValue = (row, col) => {
           return jsonData[row]?.[col] || "";
         };
 
-        // Customer information
         const customerName = getCellValue(6, 1);
         const invoiceNumber = getCellValue(4, 4);
-        const invoiceDate = getCellValue(4, 6); // This will be in Excel's date format
+        const invoiceDate = getCellValue(4, 6); // This will be in Excel's date format (number or string)
         const companyAddress = getCellValue(6, 3);
         const email = getCellValue(9, 1);
         const phone = getCellValue(11, 1);
 
-        // Book data - find all rows from row 17 until "Grand Total (Rp.)" is found
         const bookList = [];
         let row = 17;
         while (true) {
-          // Check if current row contains "Grand Total (Rp.)"
           const hasGrandTotal = jsonData[row]?.some((cell) =>
             String(cell).includes("Grand Total (Rp.)")
           );
@@ -229,7 +214,6 @@ function InvoiceEdit() {
           const price = getCellValue(row, 4);
           const disc = getCellValue(row, 5);
 
-          // Skip empty rows (where all relevant fields are empty)
           if (qty !== "" && price !== "") {
             const bookName =
               isbnBook === "-"
@@ -244,32 +228,30 @@ function InvoiceEdit() {
               disc: disc ? (parseFloat(disc) * 100).toString() : "",
             });
           }
-
           row++;
         }
 
-        // Convert Excel date number to JavaScript Date object, then format to dd/mm/yyyy
+        // --- Start: Improved Excel Date to dd/mm/yyyy conversion ---
         let formattedInvoiceDate = "";
         if (typeof invoiceDate === 'number') {
-          // Excel dates are numbers representing days since 1900-01-01
-          // Subtract 1 because Excel's epoch is 1900-01-01, JS is 1970-01-01, and Excel counts 1900-02-29 which didn't exist.
-          // The 25569 is the number of days between 1900-01-01 and 1970-01-01 plus one day for Excel's 1900 leap year bug
+          // Excel dates are numbers representing days since 1900-01-01.
+          // 25569 is the number of days between 1900-01-01 and 1970-01-01, adjusted for Excel's 1900 leap year bug.
           const date = new Date(Math.round((invoiceDate - 25569) * 86400 * 1000));
           const day = String(date.getDate()).padStart(2, '0');
           const month = String(date.getMonth() + 1).padStart(2, '0');
           const year = date.getFullYear();
           formattedInvoiceDate = `${day}/${month}/${year}`;
         } else if (typeof invoiceDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)) {
-            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy
+            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
         } else {
-            formattedInvoiceDate = ""; // Handle other formats or invalid dates from Excel
+            // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
+            formattedInvoiceDate = "";
         }
+        // --- End: Improved Excel Date to dd/mm/yyyy conversion ---
 
-
-        // 6. Update state
         setInvoiceData({
           serie: invoiceNumber,
-          date: formattedInvoiceDate, // Use the reformatted date
+          date: formattedInvoiceDate, // Use the correctly formatted date
           name: customerName.split("-")[0]?.trim(),
           company: customerName.split("-")[1]?.trim(),
           email: email,
@@ -293,67 +275,67 @@ function InvoiceEdit() {
     e.target.value = "";
   };
 
-  // create Invoice update function
   const updInvoice = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     try {
-      // Remove the empty book object before sending to server
+      // 1. Convert the displayed date (dd/mm/yyyy) to a backend-friendly format (e.g., YYYY-MM-DD)
+      let dateForBackend = invoiceData.date;
+      if (dateForBackend && /^\d{2}\/\d{2}\/\d{4}$/.test(dateForBackend)) {
+        const [day, month, year] = dateForBackend.split('/');
+        dateForBackend = `${year}-${month}-${day}`;
+      } else {
+        // Handle cases where the date might be empty or invalid after user input
+        dateForBackend = null; // Or an empty string, depending on your backend's expectation
+      }
+
       const cleanedData = {
         ...invoiceData,
+        date: dateForBackend, // Use the converted date for the backend
         bookList: invoiceData.bookList.filter(Boolean),
       };
 
-      // Add the Invoice into database with axios
       await axios.patch(
         `https://seg-server.vercel.app/api/invoices/id/${id}`,
         cleanedData
       );
-      // Navigate to main page
       navigate(`/invoices`);
     } catch (error) {
-      console.log(error); // display error message
+      console.log(error);
     }
   };
 
-  //reload
-  // setting up useEffect to do tasks in real-time
   useEffect(() => {
-    // create Invoice loader callback function
     const getInvoiceById = async () => {
       try {
-        // get all the datas from database with axios
         const res = await axios.get(
           `https://seg-server.vercel.app/api/invoices/id/${id}`
         );
 
-        // input all the datas into useState
-        // Format the date from the fetched data to dd/mm/yyyy for display
+        // --- Start: Format fetched date to dd/mm/yyyy for display ---
         let fetchedDate = res.data.date;
-        if (fetchedDate && !/^\d{2}\/\d{2}\/\d{4}$/.test(fetchedDate)) {
-            // Assuming fetchedDate from backend might be in YYYY-MM-DD or other formats
-            // Convert to Date object, then to dd/mm/yyyy
-            try {
-                const dateObj = new Date(fetchedDate);
-                if (!isNaN(dateObj)) { // Check if the date object is valid
-                    const day = String(dateObj.getDate()).padStart(2, '0');
-                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                    const year = dateObj.getFullYear();
-                    fetchedDate = `${day}/${month}/${year}`;
-                } else {
-                    fetchedDate = ""; // Invalid date, clear it
-                }
-            } catch (parseError) {
-                fetchedDate = ""; // Error parsing, clear it
+        if (fetchedDate) {
+            // Attempt to parse the date string (assuming it might be YYYY-MM-DD from backend)
+            const dateObj = new Date(fetchedDate);
+            // Check if dateObj is a valid date (not 'Invalid Date')
+            if (!isNaN(dateObj.getTime())) {
+                const day = String(dateObj.getDate()).padStart(2, '0');
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+                const year = dateObj.getFullYear();
+                fetchedDate = `${day}/${month}/${year}`;
+            } else {
+                fetchedDate = ""; // If parsing fails, clear the date
             }
+        } else {
+            fetchedDate = ""; // If fetchedDate is null/undefined, clear it
         }
-
+        // --- End: Format fetched date to dd/mm/yyyy for display ---
 
         setInvoiceData({
           ...res.data,
-          date: fetchedDate,
+          date: fetchedDate, // Set the formatted date
         });
       } catch (error) {
-        console.log(error); // display error message
+        console.log(error);
       }
     };
 
@@ -361,11 +343,11 @@ function InvoiceEdit() {
 
     const getBooks = async () => {
       try {
-        const url = `https://seg-server.vercel.app/api/books`; // modify URL based on backend
+        const url = `https://seg-server.vercel.app/api/books`;
         const datas = await axios.get(url);
         setBooks(datas.data);
       } catch (error) {
-        window.alert(error.message); // display error message
+        window.alert(error.message);
       }
     };
 

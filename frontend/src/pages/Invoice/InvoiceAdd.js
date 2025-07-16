@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
 
-//init
 function InvoiceAdd() {
   const [books, setBooks] = useState([]);
   const [invoiceData, setInvoiceData] = useState({
@@ -55,7 +54,7 @@ function InvoiceAdd() {
 
       if (hasSlashes) {
         // If slashes are present, assume it's a pre-formatted paste
-        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) { // Validate dd/mm/yyyy format
           formattedValue = value;
         } else {
           // If it has slashes but doesn't match dd/mm/yyyy, clear or handle as an error
@@ -64,7 +63,7 @@ function InvoiceAdd() {
       } else {
         // Auto-add slashes for typing
         for (let i = 0; i < cleanValue.length; i++) {
-          if (i === 2 || i === 4) {
+          if (i === 2 || i === 4) { // Add slash after day and month
             formattedValue += '/';
           }
           formattedValue += cleanValue[i];
@@ -95,6 +94,7 @@ function InvoiceAdd() {
       const selectedBook = books.find((book) => book.isbn === value);
 
       if (value === null || value === "" || value === "-") {
+        // Find elements and set their display.
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
         if (hed) hed.style = "display: none";
@@ -112,6 +112,7 @@ function InvoiceAdd() {
           ),
         });
       } else if (selectedBook) {
+        // Find elements and set their display.
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
         if (hed) hed.style = "display: block";
@@ -131,6 +132,7 @@ function InvoiceAdd() {
           ),
         });
       } else if (!selectedBook) {
+        // Find elements and set their display.
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
         if (hed) hed.style = "display: none";
@@ -196,45 +198,35 @@ function InvoiceAdd() {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        // 1. Parse the Excel file
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: "array" });
-
-        // 2. Get the first worksheet
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-
-        // 3. Convert to JSON with header row
         const jsonData = XLSX.utils.sheet_to_json(worksheet, {
           header: 1,
           defval: "",
         });
 
-        // 4. Validate basic structure
         if (jsonData.length < 24) {
           throw new Error(
             "The Excel file doesn't match the expected format. Please use the correct template."
           );
         }
 
-        // 5. Extract data with safety checks
         const getCellValue = (row, col) => {
           return jsonData[row]?.[col] || "";
         };
 
-        // Customer information
         const customerName = getCellValue(6, 1);
         const invoiceNumber = getCellValue(4, 4);
-        const invoiceDate = getCellValue(4, 6); // This will be in Excel's date format
+        const invoiceDate = getCellValue(4, 6); // This will be in Excel's date format (number or string)
         const companyAddress = getCellValue(6, 3);
         const email = getCellValue(9, 1);
         const phone = getCellValue(11, 1);
 
-        // Book data - find all rows from row 17 until "Grand Total (Rp.)" is found
         const bookList = [];
         let row = 17;
         while (true) {
-          // Check if current row contains "Grand Total (Rp.)"
           const hasGrandTotal = jsonData[row]?.some((cell) =>
             String(cell).includes("Grand Total (Rp.)")
           );
@@ -251,7 +243,6 @@ function InvoiceAdd() {
           const price = getCellValue(row, 4);
           const disc = getCellValue(row, 5);
 
-          // Skip empty rows (where all relevant fields are empty)
           if (qty !== "" && price !== "") {
             const bookName =
               isbnBook === "-"
@@ -266,30 +257,29 @@ function InvoiceAdd() {
               disc: disc ? (parseFloat(disc) * 100).toString() : "",
             });
           }
-
           row++;
         }
 
-        // Convert Excel date number to JavaScript Date object, then format
+        // Convert Excel date number to JavaScript Date object, then format to dd/mm/yyyy
         let formattedInvoiceDate = "";
         if (typeof invoiceDate === 'number') {
-          // Excel dates are numbers representing days since 1900-01-01
-          // Subtract 1 because Excel's epoch is 1900-01-01, JS is 1970-01-01, and Excel counts 1900-02-29 which didn't exist.
+          // Excel dates are numbers representing days since 1900-01-01.
+          // 25569 is the number of days between 1900-01-01 and 1970-01-01, adjusted for Excel's 1900 leap year bug.
           const date = new Date(Math.round((invoiceDate - 25569) * 86400 * 1000));
           const day = String(date.getDate()).padStart(2, '0');
           const month = String(date.getMonth() + 1).padStart(2, '0');
           const year = date.getFullYear();
           formattedInvoiceDate = `${day}/${month}/${year}`;
         } else if (typeof invoiceDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)) {
-            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy
+            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
         } else {
-            formattedInvoiceDate = ""; // Handle other formats or invalid dates from Excel
+            // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
+            formattedInvoiceDate = "";
         }
 
-        // 6. Update state
         setInvoiceData({
           serie: invoiceNumber,
-          date: formattedInvoiceDate, // Use the reformatted date
+          date: formattedInvoiceDate, // Use the correctly formatted date
           name: customerName.split("-")[0]?.trim(),
           company: customerName.split("-")[1]?.trim(),
           email: email,
@@ -316,8 +306,19 @@ function InvoiceAdd() {
   const AddInvoice = async (e) => {
     e.preventDefault();
     try {
+      // Convert the displayed date (dd/mm/yyyy) to a backend-friendly format (e.g., YYYY-MM-DD)
+      let dateForBackend = invoiceData.date;
+      if (dateForBackend && /^\d{2}\/\d{2}\/\d{4}$/.test(dateForBackend)) {
+        const [day, month, year] = dateForBackend.split('/');
+        dateForBackend = `${year}-${month}-${day}`;
+      } else {
+        // Handle cases where the date might be empty or invalid after user input
+        dateForBackend = null; // Or an empty string, depending on your backend's expectation
+      }
+
       const cleanedData = {
         ...invoiceData,
+        date: dateForBackend, // Use the converted date for the backend
         bookList: invoiceData.bookList.filter(Boolean),
       };
 
