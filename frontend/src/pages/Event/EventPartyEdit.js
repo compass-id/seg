@@ -9,15 +9,7 @@ function EventPartyEdit() {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const [eventData, setEventData] = useState({
-    name: "",
-    company: "",
-    job: "",
-    email: "",
-    phone: "",
-    address: "",
-    referral: "",
-  });
+  const [eventData, setEventData] = useState({});
 
   const handleFile = (event) => {
     if (event.target.files[0] !== null) {
@@ -129,7 +121,33 @@ function EventPartyEdit() {
                 name="name"
                 value={eventData.name}
                 onChange={handleChange}
-                placeholder="Event Name"
+                placeholder="Name"
+                required
+              />
+            </div>
+            <div className="field">
+              <label className="label">Parent Name</label>
+              <input
+                type="text"
+                className="input"
+                id="parentName"
+                name="parentName"
+                value={eventData.name}
+                onChange={handleChange}
+                placeholder="Parent Name"
+                required
+              />
+            </div>
+            <div className="field">
+              <label className="label">Name</label>
+              <input
+                type="text"
+                className="input"
+                id="childName"
+                name="childName"
+                value={eventData.childName}
+                onChange={handleChange}
+                placeholder="Child Name"
                 required
               />
             </div>
@@ -157,6 +175,18 @@ function EventPartyEdit() {
                 id="company"
                 name="company"
                 value={eventData.company}
+                onChange={handleChange}
+                placeholder="Company/Agency"
+              />
+            </div>
+            <div className="field">
+              <label className="label">School</label>
+              <input
+                type="text"
+                className="input"
+                id="school"
+                name="school"
+                value={eventData.school}
                 onChange={handleChange}
                 placeholder="Company/Agency"
               />

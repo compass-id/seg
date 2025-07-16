@@ -37,6 +37,15 @@ const prtSchema = mongoose.Schema(
     referral: {
       type: String,
     },
+    parentName: {
+      type: String,
+    },
+    childName: {
+      type: String,
+    },
+    school: {
+      type: String,
+    },
   },
   {
     timestamps: true,

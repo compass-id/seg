@@ -124,9 +124,48 @@ function EventPartyList() {
                 <tr>
                   <th>No.</th>
                   <th>Reg. Date</th>
-                  <th>Participant Name</th>
-                  <th>Company</th>
-                  <th>Occupation</th>
+                  {parties.find(
+                    (party) => party.name === "" || !party.name
+                  ) ? (
+                    ""
+                  ) : (
+                    <th>Participant's Name</th>
+                      )}
+                      {parties.find(
+                    (party) => party.parentName === "" || !party.parentName
+                  ) ? (
+                    ""
+                  ) : (
+                    <th>Parent's Name'</th>
+                      )}
+                      {parties.find(
+                    (party) => party.childName === "" || !party.childName
+                  ) ? (
+                    ""
+                  ) : (
+                    <th>Child's Name'</th>
+                  )}
+                  {parties.find(
+                    (party) => party.company === "" || !party.company
+                  ) ? (
+                    ""
+                  ) : (
+                    <th>Company</th>
+                      )}
+                      {parties.find(
+                    (party) => party.school === "" || !party.school
+                  ) ? (
+                    ""
+                  ) : (
+                    <th>School Name</th>
+                  )}
+                  {parties.find(
+                    (party) => party.job === "" || !party.job
+                  ) ? (
+                    ""
+                  ) : (
+                    <th>Occupation</th>
+                  )}
                   {parties.find((party) => party.room !== "") ? (
                     <th>Attendance</th>
                   ) : (
@@ -162,7 +201,10 @@ function EventPartyList() {
                     <td>{index + 1}</td>
                     <td>{formatDate(party.createdAt)}</td>
                     <td>{party.name}</td>
+                    <td>{party.parentName}</td>
+                    <td>{party.childName}</td>
                     <td>{party.company}</td>
+                    <td>{party.school}</td>
                     <td>{party.job}</td>
                     {party.room !== "" ? <td>{party.room}</td> : ""}
                     {party.referral === "" || !party.referral ? (
