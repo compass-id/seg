@@ -23,7 +23,7 @@ const BookEdit = () => {
     try {
       await axios.delete(`https://seg-server.vercel.app/api/books/id/${id}`); // modify URL based on backend
       // navigate to main page
-      navigate(`/`);
+      navigate(`/books`);
     } catch (error) {
       window.alert(error.message); // display error message
     }
@@ -42,7 +42,7 @@ const BookEdit = () => {
       });
 
       // navigate to main page
-      navigate("/");
+      navigate("/books");
     } catch (error) {
       console.log(error); // display error message
     }
