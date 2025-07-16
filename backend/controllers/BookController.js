@@ -76,7 +76,7 @@ export const getPriceByIsbn = asyncHandler(async (req, res) => {
     }
         
 // Recommended Change:
-res.status(200).json({ price: book.bookPrice }); 
+res.status(200).send(String(book.bookPrice)); // Sends the price as a plain string, e.g., "140000"
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
@@ -93,7 +93,7 @@ export const getEPriceByIsbn = asyncHandler(async (req, res) => {
     }
 
 // Recommended Change:
-res.status(200).json({ price: book.ebookPrice }); // Or { unitPrice: book.ebookPrice }
+res.status(200).send(String(book.ebookPrice)); // Or { unitPrice: book.ebookPrice }
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
