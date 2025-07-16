@@ -136,7 +136,7 @@ function EventPartyList() {
                   ) ? (
                     ""
                   ) : (
-                    <th>Parent's Name'</th>
+                    <th>Parent's Name</th>
                       )}
                       {parties.find(
                     (party) => party.childName === "" || !party.childName
@@ -166,7 +166,7 @@ function EventPartyList() {
                   ) : (
                     <th>Occupation</th>
                   )}
-                  {parties.find((party) => party.room !== "") ? (
+                  {parties.find((party) => party.room !== "" || !party.room) ? (
                     <th>Attendance</th>
                   ) : (
                     ""
@@ -181,12 +181,12 @@ function EventPartyList() {
                   <th>Phone</th>
                   <th>Email</th>
                   <th>Address</th>
-                  {parties.find((party) => party.method !== "") ? (
+                  {parties.find((party) => party.method !== "" || !party.method) ? (
                     <th>Payment</th>
                   ) : (
                     <></>
                   )}
-                  {parties.find((party) => party.file !== "") ? (
+                  {parties.find((party) => party.file !== "" || !party.file) ? (
                     <th>Attachment</th>
                   ) : (
                     <></>
@@ -200,13 +200,32 @@ function EventPartyList() {
                   <tr key={party._id}>
                     <td>{index + 1}</td>
                     <td>{formatDate(party.createdAt)}</td>
+
+                    {parties.find((party) => party.name !== "" || !party.name) ? (
                     <td>{party.name}</td>
-                    <td>{party.parentName}</td>
+                  ) : (
+                    <></>
+                    )}
+                    
+                    {parties.find((party) => party.parentName !== "" || !party.parentName) ? (
+                      <>
+                      <td>{party.parentName}</td>
                     <td>{party.childName}</td>
-                    <td>{party.company}</td>
+                      </>
+                  ) : (
+                    <></>
+                  )}
+                    
+                    {parties.find((party) => party.company !== "" || !party.company) ? (
+                      <>
+                        <td>{party.company}</td>
+                        <td>{party.job}</td>
+                      </>
+                  ) : (
                     <td>{party.school}</td>
-                    <td>{party.job}</td>
-                    {party.room !== "" ? <td>{party.room}</td> : ""}
+                  )}
+                    
+                    {party.room !== "" || !party.room ? <td>{party.room}</td> : ""}
                     {party.referral === "" || !party.referral ? (
                       ""
                     ) : (
