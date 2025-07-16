@@ -9,6 +9,7 @@ import {
   setBook,
   getNameByIsbn,
   getPriceByIsbn,
+  getEPriceByIsbn,
 } from "../controllers/BookController.js";
 
 // import express
@@ -22,6 +23,7 @@ bookRouter.get("/api/books", getBooks);
 bookRouter.get("/api/books/isbn/:name", getIsbnByName);
 bookRouter.get("/api/books/name/:isbn", getNameByIsbn);
 bookRouter.get("/api/books/price/:isbn", getPriceByIsbn);
+bookRouter.get("/api/books/eprice/:isbn", getEPriceByIsbn);
 bookRouter.get("/api/books/id/:id", getBookById);
 bookRouter.get("/api/books/key/:key", getBookByKey);
 bookRouter.post("/api/books", setBook);

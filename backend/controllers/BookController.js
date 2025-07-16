@@ -74,7 +74,22 @@ export const getPriceByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-    res.status(200).json(book.price);
+    res.status(200).json(book.bookPrice);
+  } catch (error) {
+    res.status(500);
+    throw new Error(error.message);
+  }
+});
+
+// Get book name by ISBN
+export const getEPriceByIsbn = asyncHandler(async (req, res) => {
+  try {
+    const book = await Book.findOne({ isbn: req.params.isbn });
+    if (!book) {
+      res.status(404);
+      throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
+    }
+    res.status(200).json(book.ebookPrice);
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
