@@ -6,20 +6,7 @@ function EventAdd() {
   // Fetches latest Event count for serie generation (Optional)
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [eventData, setEventData] = useState({
-    price: "",
-    model: "",
-    title: "",
-    desc: "",
-    pic: "",
-    img: "",
-    address: "",
-    start: "",
-    end: "",
-    contact: "",
-    group: "",
-    type: "",
-  });
+  const [eventData, setEventData] = useState({});
 
   const handleReset = () => {
     setEventData({
@@ -127,6 +114,7 @@ function EventAdd() {
                 <option value="Booking">Booking</option>
                 <option value="Survey">Survey</option>
                 <option value="Agent">Agent</option>
+                <option value="Contest">Contest</option>
               </select>
             </div>
             <div className="field">
