@@ -24,7 +24,7 @@ const BookAdd = () => {
   const navigate = useNavigate();
 
   // create the save book function
-  const saveBook = async (e) => {
+  const saveBook = async () => {
     try {
       // save the book into database with axios
       await axios.post(`https://seg-server.vercel.app/api/books`, {
@@ -36,7 +36,7 @@ const BookAdd = () => {
       });
 
       // navigate to main page
-      navigate(`/`);
+      navigate(`/books`);
     } catch (error) {
       window.alert(error.message); // display error message
     }
