@@ -8,6 +8,7 @@ import {
   delBook,
   setBook,
   getNameByIsbn,
+  getPriceByIsbn,
 } from "../controllers/BookController.js";
 
 // import express
@@ -20,6 +21,7 @@ const bookRouter = express.Router();
 bookRouter.get("/api/books", getBooks);
 bookRouter.get("/api/books/isbn/:name", getIsbnByName);
 bookRouter.get("/api/books/name/:isbn", getNameByIsbn);
+bookRouter.get("/api/books/price/:isbn", getPriceByIsbn);
 bookRouter.get("/api/books/id/:id", getBookById);
 bookRouter.get("/api/books/key/:key", getBookByKey);
 bookRouter.post("/api/books", setBook);
