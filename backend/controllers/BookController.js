@@ -75,14 +75,17 @@ export const getPriceByIsbn = asyncHandler(async (req, res) => {
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
     
-    const formattedPrice = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  minimumFractionDigits: 0
-}).format(book.bookPrice);
-    // Returns "Rp140.000"
+    const formatCurrencyIDR = (amount) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  }).format(amount);
+}
 
-    res.status(200).json(formattedPrice)
+// Usage:
+const unitPrice = book.bookPrice;
+res.status(200).json(formatCurrencyIDR(unitPrice))
 
     
   } catch (error) {
@@ -99,14 +102,19 @@ export const getEPriceByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-    const formattedPrice = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  minimumFractionDigits: 0
-}).format(book.ebookPrice);
-    // Returns "Rp140.000"
+    
+    const formatCurrencyIDR = (amount) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0
+  }).format(amount);
+}
 
-    res.status(200).json(formattedPrice)
+// Usage:
+const unitPrice = book.ebookPrice;
+res.status(200).json(formatCurrencyIDR(unitPrice))
+
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
