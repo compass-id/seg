@@ -195,10 +195,11 @@ function EventPartyList() {
                   ) : (  
                     <th>Payment</th>
                   )}
-                  {parties.find((party) => party.file !== "") ? (
-                    <th>Attachment</th>
+                  {parties.find((party) => party.file === "" || !party.file) ? (
+                   <></>
                   ) : (
-                    <></>
+                          
+                     <th>Attachment</th>
                   )}
                   <th>Action</th>
                 </tr>
@@ -217,13 +218,11 @@ function EventPartyList() {
                   <td>{party.name}</td>
                     )}
                     
-                    {parties.find((party) => party.parentName !== "") ? (
-                      <>
-                      <td>{party.parentName}</td>
-                    <td>{party.childName}</td>
-                      </>
+                    {parties.find((party) => party.parentName === "" || !party.parentName) ? (
+                      <></>
                   ) : (
-                    <></>
+                    <><td>{party.parentName}</td>
+                    <td>{party.childName}</td></>
                   )}
                     
                     {parties.find((party) => party.company === "" || !party.company) ? (
@@ -236,9 +235,7 @@ function EventPartyList() {
                     )}
                     
                     {parties.find((party) => party.school === "" || !party.school) ? (
-                      <>
-                        
-                      </>
+                      <></>
                   ) : (
                         <>
                           <td>{party.school}</td>
@@ -272,7 +269,7 @@ function EventPartyList() {
                     </td>
                     <td>{party.address.toUpperCase()}</td>
                     {party.method === "" || !party.method ? <></> : <td>{party.method}</td>} 
-                    {party.file !== "" ? (
+                    {party.file === "" || !party.file ? (<></>) : (
                       <td>
                         <a
                           href={`${party.file}`}
@@ -282,8 +279,6 @@ function EventPartyList() {
                           SEE FILE
                         </a>
                       </td>
-                    ) : (
-                      <></>
                     )}
                     <td>
                       <button
