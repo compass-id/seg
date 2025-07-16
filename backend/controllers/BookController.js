@@ -74,30 +74,7 @@ export const getPriceByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-    
-    const formatCurrencyIDR = (amount) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0
-  }).format(amount);
-    }
-
-    
-const unitPrice = book.bookPrice;
-    
-    // Client-side parsing for current API format
-const parseApiPrice = (apiString) => {
-  // Remove "Rp ", dots, and convert to number
-  return Number(apiString.replace("Rp ", "").replace(/\./g, ""));
-}
-
-const numericValue = parseApiPrice(formatCurrencyIDR(unitPrice)); // 148080
-
-// Usage:
-res.status(200).json(numericValue)
-
-    
+    res.status(200).json(book.bookPrice);
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
@@ -112,29 +89,7 @@ export const getEPriceByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-    
-   const formatCurrencyIDR = (amount) => {
-  return new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-    minimumFractionDigits: 0
-  }).format(amount);
-    }
-
-    
-const unitPrice = book.ebookPrice;
-    
-    // Client-side parsing for current API format
-const parseApiPrice = (apiString) => {
-  // Remove "Rp ", dots, and convert to number
-  return Number(apiString.replace("Rp ", "").replace(/\./g, ""));
-}
-
-const numericValue = parseApiPrice(formatCurrencyIDR(unitPrice)); // 148080
-
-// Usage:
-res.status(200).json(numericValue)
-
+    res.status(200).json(book.ebookPrice);
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
