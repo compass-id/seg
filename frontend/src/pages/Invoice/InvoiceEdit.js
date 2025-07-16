@@ -315,6 +315,7 @@ function InvoiceEdit() {
     }
   };
 
+  //reload
   // setting up useEffect to do tasks in real-time
   useEffect(() => {
     // create Invoice loader callback function
