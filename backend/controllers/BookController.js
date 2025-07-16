@@ -74,7 +74,17 @@ export const getPriceByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-    res.status(200).json(book.bookPrice);
+    
+    const formattedPrice = new Intl.NumberFormat('id-ID', {
+  style: 'currency',
+  currency: 'IDR',
+  minimumFractionDigits: 0
+}).format(book.bookPrice);
+    // Returns "Rp140.000"
+
+    res.status(200).json(formattedPrice)
+
+    
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
@@ -89,7 +99,14 @@ export const getEPriceByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-    res.status(200).json(book.ebookPrice);
+    const formattedPrice = new Intl.NumberFormat('id-ID', {
+  style: 'currency',
+  currency: 'IDR',
+  minimumFractionDigits: 0
+}).format(book.ebookPrice);
+    // Returns "Rp140.000"
+
+    res.status(200).json(formattedPrice)
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
