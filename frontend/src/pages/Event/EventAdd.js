@@ -107,14 +107,14 @@ function EventAdd() {
               <select
                 name="type"
                 value={eventData.type}
-                onChange={handleChange}
-              >
+                onChange={handleChange}>
                 <option value="">--- Select Form Type ---</option>
                 <option value="Registration">Registration</option>
                 <option value="Booking">Booking</option>
                 <option value="Survey">Survey</option>
                 <option value="Agent">Agent</option>
                 <option value="Contest">Contest</option>
+                <option value="Contest-Part">Contest-Part</option>
               </select>
             </div>
             <div className="field">
@@ -122,8 +122,7 @@ function EventAdd() {
               <select
                 name="model"
                 value={eventData.model}
-                onChange={handleChange}
-              >
+                onChange={handleChange}>
                 <option value="">--- Select Model ---</option>
                 <option value="Online">Online</option>
                 <option value="Onsite">Onsite</option>
@@ -211,8 +210,7 @@ function EventAdd() {
                 name="address"
                 value={eventData.address}
                 onChange={handleChange}
-                placeholder="Event Address"
-              ></textarea>
+                placeholder="Event Address"></textarea>
             </div>
             <div className="field">
               <label className="label">Description</label>
@@ -223,8 +221,7 @@ function EventAdd() {
                 name="desc"
                 value={eventData.desc}
                 onChange={handleChange}
-                placeholder="Event Description"
-              ></textarea>
+                placeholder="Event Description"></textarea>
             </div>
             <div className="field">
               <label className="label">Image</label>
