@@ -123,83 +123,80 @@ function EventPartyList() {
               <thead>
                 <tr>
                   <th>No.</th>
-                      <th>Reg. Date</th>
-                      
-                  {parties.find(
-                    (party) => party.name === "" || !party.name
-                  ) ? (
+                  <th>Reg. Date</th>
+
+                  {parties.find((party) => party.name === "" || !party.name) ? (
                     ""
                   ) : (
                     <th>Participant's Name</th>
-                      )}
+                  )}
 
-                      {parties.find(
+                  {parties.find(
                     (party) => party.parentName === "" || !party.parentName
                   ) ? (
                     ""
                   ) : (
                     <th>Parent's Name</th>
-                      )}
+                  )}
 
-                      {parties.find(
+                  {parties.find(
                     (party) => party.childName === "" || !party.childName
                   ) ? (
                     ""
                   ) : (
                     <th>Child's Name'</th>
-                      )}
-                      
+                  )}
+
                   {parties.find(
                     (party) => party.company === "" || !party.company
                   ) ? (
                     ""
                   ) : (
                     <th>Company</th>
-                      )}
+                  )}
 
-                      {parties.find(
+                  {parties.find(
                     (party) => party.school === "" || !party.school
                   ) ? (
                     ""
                   ) : (
                     <th>School Name</th>
-                      )}
-                      
-                  {parties.find(
-                    (party) => party.job === "" || !party.job
-                  ) ? (
+                  )}
+
+                  {parties.find((party) => party.job === "" || !party.job) ? (
                     ""
                   ) : (
                     <th>Occupation</th>
-                      )}
-                      
+                  )}
+
                   {parties.find((party) => party.room === "" || !party.room) ? (
-                   <></>
+                    <></>
                   ) : (
-                     <th>Attendance</th>
-                      )}
-                      
+                    <th>Attendance</th>
+                  )}
+
                   {parties.find(
-                    (party) => party.referral === "" || !party.referral
+                    (party) => party.referral !== "" || party.referral
                   ) ? (
-                    ""
-                  ) : (
                     <th>Referral</th>
-                      )}
-                      
+                  ) : (
+                    <></>
+                  )}
+
                   <th>Phone</th>
                   <th>Email</th>
                   <th>Address</th>
-                  {parties.find((party) => party.method === "" || !party.method) ? (
+                  {parties.find(
+                    (party) => party.method === "" || !party.method
+                  ) ? (
                     <></>
-                  ) : (  
+                  ) : (
                     <th>Payment</th>
                   )}
                   {parties.find((party) => party.file === "" || !party.file) ? (
-                   <></>
+                    <></>
                   ) : (
-                          
-                     <th>Attachment</th>
+                    <th>Attachment</th>
                   )}
                   <th>Action</th>
                 </tr>
@@ -211,49 +208,61 @@ function EventPartyList() {
                     <td>{index + 1}</td>
                     <td>{formatDate(party.createdAt)}</td>
 
-                    {parties.find((party) => party.name === "" || !party.name) ? (
-                    <></>
-                  ) : (
-                        
-                  <td>{party.name}</td>
-                    )}
-                    
-                    {parties.find((party) => party.parentName === "" || !party.parentName) ? (
+                    {parties.find(
+                      (party) => party.name === "" || !party.name
+                    ) ? (
                       <></>
-                  ) : (
-                    <><td>{party.parentName}</td>
-                    <td>{party.childName}</td></>
-                  )}
-                    
-                    {parties.find((party) => party.company === "" || !party.company) ? (
-                      <>
-                        
-                      </>
-                  ) : (
-                        <><td>{party.company}</td>
-                        <td>{party.job}</td></>
-                    )}
-                    
-                    {parties.find((party) => party.school === "" || !party.school) ? (
-                      <></>
-                  ) : (
-                        <>
-                          <td>{party.school}</td>
-                        </>
-                    )}
-                    
-                    {party.room === "" || !party.room ? (<></>) : (<td>{party.room}</td>)}
-                    {party.referral === "" || !party.referral ? (
-                      ""
                     ) : (
+                      <td>{party.name}</td>
+                    )}
+
+                    {parties.find(
+                      (party) => party.parentName === "" || !party.parentName
+                    ) ? (
+                      <></>
+                    ) : (
+                      <>
+                        <td>{party.parentName}</td>
+                        <td>{party.childName}</td>
+                      </>
+                    )}
+
+                    {parties.find(
+                      (party) => party.company === "" || !party.company
+                    ) ? (
+                      <></>
+                    ) : (
+                      <>
+                        <td>{party.company}</td>
+                        <td>{party.job}</td>
+                      </>
+                    )}
+
+                    {parties.find(
+                      (party) => party.school === "" || !party.school
+                    ) ? (
+                      <></>
+                    ) : (
+                      <>
+                        <td>{party.school}</td>
+                      </>
+                    )}
+
+                    {party.room === "" || !party.room ? (
+                      <></>
+                    ) : (
+                      <td>{party.room}</td>
+                    )}
+                    {party.referral !== "" || party.referral ? (
                       <td>{party.referral}</td>
+                    ) : (
+                      <></>
                     )}
                     <td>
                       <a
                         href={`https://wa.me/${formatWhatsApp(party.phone)}`}
                         target="_blank"
-                        rel="noreferrer"
-                      >
+                        rel="noreferrer">
                         {formatPhone(party.phone)}
                       </a>
                     </td>
@@ -262,20 +271,24 @@ function EventPartyList() {
                         href={`mailto:${party.email.toLowerCase()}`}
                         target="_blank"
                         rel="noreferrer"
-                        style={{ textTransform: "lowercase" }}
-                      >
+                        style={{ textTransform: "lowercase" }}>
                         {party.email}
                       </a>
                     </td>
                     <td>{party.address.toUpperCase()}</td>
-                    {party.method === "" || !party.method ? <></> : <td>{party.method}</td>} 
-                    {party.file === "" || !party.file ? (<></>) : (
+                    {party.method === "" || !party.method ? (
+                      <></>
+                    ) : (
+                      <td>{party.method}</td>
+                    )}
+                    {party.file === "" || !party.file ? (
+                      <></>
+                    ) : (
                       <td>
                         <a
                           href={`${party.file}`}
                           target="_blank"
-                          rel="noreferrer"
-                        >
+                          rel="noreferrer">
                           SEE FILE
                         </a>
                       </td>
@@ -285,8 +298,7 @@ function EventPartyList() {
                         onClick={() =>
                           navigate(`/event-join-edit/${party._id}`)
                         }
-                        className="btn"
-                      >
+                        className="btn">
                         Edit
                       </button>
                     </td>
