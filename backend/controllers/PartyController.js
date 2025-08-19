@@ -81,6 +81,11 @@ export const getPartyByKey = asyncHandler(async (req, res) => {
     const prt = await Party.find({
       $or: [
         {
+          event: {
+            $regex: req.params.event,
+          },
+        },
+        {
           name: {
             $regex: req.params.key,
           },
