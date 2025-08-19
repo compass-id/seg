@@ -89,7 +89,22 @@ export const getPartyByKey = asyncHandler(async (req, res) => {
           },
         },
         {
+          parentName: {
+            $regex: req.params.key,
+          },
+        },
+        {
+          childName: {
+            $regex: req.params.key,
+          },
+        },
+        {
           company: {
+            $regex: req.params.key,
+          },
+        },
+        {
+          school: {
             $regex: req.params.key,
           },
         },
@@ -109,7 +124,7 @@ export const getPartyByKey = asyncHandler(async (req, res) => {
           },
         },
         {
-          method: {
+          referral: {
             $regex: req.params.key,
           },
         },
