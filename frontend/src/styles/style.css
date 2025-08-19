@@ -687,6 +687,7 @@ body {
 
   .sit {
     font-size: 0.7em;
+    overflow-x: scroll !important;
   }
 }
 
