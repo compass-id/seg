@@ -244,7 +244,20 @@ function EventPartyEdit() {
               />
             </div>
             <div className="field">
-              <label className="label">Image</label>
+              <label className="label">Referral</label>
+              <input
+                type="text"
+                className="input"
+                id="referral"
+                name="referral"
+                value={eventData.referral}
+                onChange={handleChange}
+                placeholder="Referral"
+                required
+              />
+            </div>
+            <div className="field">
+              <label className="label">Attachment</label>
               <input
                 type="file"
                 className="input"
