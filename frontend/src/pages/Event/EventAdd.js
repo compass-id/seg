@@ -202,6 +202,17 @@ function EventAdd() {
               />
             </div>
             <div className="field">
+              <label className="label">Image</label>
+              <input
+                type="file"
+                className="input"
+                id="img"
+                name="img"
+                onChange={handleFile}
+                placeholder="Event Image"
+              />
+            </div>
+            <div className="field">
               <label className="label">Address</label>
               <textarea
                 type="text"
@@ -222,17 +233,6 @@ function EventAdd() {
                 value={eventData.desc}
                 onChange={handleChange}
                 placeholder="Event Description"></textarea>
-            </div>
-            <div className="field">
-              <label className="label">Image</label>
-              <input
-                type="file"
-                className="input"
-                id="img"
-                name="img"
-                onChange={handleFile}
-                placeholder="Event Image"
-              />
             </div>
             <div className="section">
               <div className="controls">

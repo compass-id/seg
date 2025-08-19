@@ -41,7 +41,7 @@ function EventPartyList() {
           setParty(datas.data);
           setIsLoading(false);
         } else {
-          const url = `https://seg-server.vercel.app/api/parties/key/${search}`; // modify URL based on backend
+          const url = `https://seg-server.vercel.app/api/parties/event/${id}/key/${search}`; // modify URL based on backend
           const datas = await axios.get(url); // get datas from URL with axios
           datas.data.length === 0 ? setIsEmpty(true) : setIsEmpty(false);
           setParty(datas.data);

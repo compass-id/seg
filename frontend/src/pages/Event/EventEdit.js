@@ -18,6 +18,7 @@ function EventEdit() {
     group: "",
     type: "",
   });
+  const [selectedFile, setSelectedFile] = useState(null);
 
   // get id from parameter
   const { id } = useParams();
@@ -42,11 +43,14 @@ function EventEdit() {
   // create Event update function
   const updEvent = async (e) => {
     e.preventDefault(); // Prevent default form submission
+
     const cleanedData = {
       ...eventData,
     };
 
     const formData = new FormData();
+    formData.append("img", selectedFile);
+
     try {
       // Add the Event into database with axios
       await axios.patch(
@@ -96,6 +100,18 @@ function EventEdit() {
         [event.target.name]: event.target.value,
       });
     }
+  };
+
+  const handleFile = (event) => {
+    setSelectedFile(event.target.files[0]);
+    // Access the filename from the selected file
+    const fileDir = "https://compasspubindonesia.com/media/api/events/img/";
+    const file = event.target.files[0];
+    const filename = file.name !== "" ? fileDir + file.name : eventData.img;
+    setEventData({
+      ...eventData,
+      img: filename,
+    });
   };
 
   return (
@@ -218,6 +234,17 @@ function EventEdit() {
                 value={eventData.group}
                 onChange={handleChange}
                 placeholder="WhatsApp Group Link"
+              />
+            </div>
+            <div className="field">
+              <label className="label">Image</label>
+              <input
+                type="file"
+                className="input"
+                id="img"
+                name="img"
+                onChange={handleFile}
+                placeholder="Event Image"
               />
             </div>
             <div className="field">

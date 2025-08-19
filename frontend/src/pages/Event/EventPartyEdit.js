@@ -63,7 +63,7 @@ function EventPartyEdit() {
       );
 
       // Navigate to main page
-      navigate(`/events`);
+      navigate(`/event-join-list/${id}`);
     } catch (error) {
       window.alert(error.message); // Display error messages
     }
@@ -157,8 +157,7 @@ function EventPartyEdit() {
                 id="job"
                 name="job"
                 value={eventData.job}
-                onChange={handleChange}
-              >
+                onChange={handleChange}>
                 <option value="">--- Select Occupation ---</option>
                 <option value="Headmaster">Headmaster</option>
                 <option value="Teacher">Teacher</option>
@@ -223,8 +222,7 @@ function EventPartyEdit() {
                 id="room"
                 name="room"
                 value={eventData.room}
-                onChange={handleChange}
-              >
+                onChange={handleChange}>
                 <option value="">
                   --- Select Attendance | Pilih Kehadiran ---
                 </option>
@@ -242,8 +240,7 @@ function EventPartyEdit() {
                 value={eventData.address}
                 onChange={handleChange}
                 placeholder="City"
-                required
-              ></textarea>
+                required></textarea>
             </div>
             <div className="field">
               <label className="label">Image</label>
