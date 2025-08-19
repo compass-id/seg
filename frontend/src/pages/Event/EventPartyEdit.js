@@ -232,7 +232,7 @@ function EventPartyEdit() {
             </div>
             <div className="field">
               <label className="label">City</label>
-              <textarea
+              <input
                 type="text"
                 className="input"
                 id="address"
@@ -240,7 +240,8 @@ function EventPartyEdit() {
                 value={eventData.address}
                 onChange={handleChange}
                 placeholder="City"
-                required></textarea>
+                required
+              />
             </div>
             <div className="field">
               <label className="label">Image</label>
