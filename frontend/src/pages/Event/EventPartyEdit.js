@@ -139,7 +139,7 @@ function EventPartyEdit() {
               />
             </div>
             <div className="field">
-              <label className="label">Name</label>
+              <label className="label">Child Name</label>
               <input
                 type="text"
                 className="input"
