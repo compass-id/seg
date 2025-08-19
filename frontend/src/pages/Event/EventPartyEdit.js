@@ -17,7 +17,7 @@ function EventPartyEdit() {
       // Access the filename from the selected file
       const fileDir = "https://compasspubindonesia.com/media/api/events/img/";
       const file = event.target.files[0];
-      const filename = fileDir + file.name;
+      const filename = file.name !== "" ? fileDir + file.name : eventData.img;
       setEventData({
         ...eventData,
         img: filename,
