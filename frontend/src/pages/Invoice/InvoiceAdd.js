@@ -267,8 +267,17 @@ function InvoiceAdd() {
     try {
       // Convert the displayed date (dd/mm/yyyy) to a backend-friendly format (e.g., YYYY-MM-DD)
 
+      function formatDate(dateStr) {
+        // Expecting input in "DD/MM/YYYY"
+        const [day, month, year] = dateStr.split("/");
+        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+      }
+
+      const formatDated = formatDate(invoiceData.date);
+
       const cleanedData = {
-        ...invoiceData, // Use the converted date for the backend
+        ...invoiceData,
+        date: formatDated, // Use the converted date for the backend
         bookList: invoiceData.bookList.filter(Boolean),
       };
 
