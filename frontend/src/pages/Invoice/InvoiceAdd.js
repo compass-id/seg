@@ -46,25 +46,27 @@ function InvoiceAdd() {
     const { name, value } = event.target;
 
     if (name === "date") {
-      let formattedValue = '';
-      const cleanValue = value.replace(/\D/g, ''); // Remove non-digits
+      let formattedValue = "";
+      const cleanValue = value.replace(/\D/g, ""); // Remove non-digits
 
       // Check if the pasted value already has slashes (e.g., from Excel import or manual paste)
-      const hasSlashes = value.includes('/');
+      const hasSlashes = value.includes("/");
 
       if (hasSlashes) {
         // If slashes are present, assume it's a pre-formatted paste
-        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) { // Validate dd/mm/yyyy format
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+          // Validate dd/mm/yyyy format
           formattedValue = value;
         } else {
           // If it has slashes but doesn't match dd/mm/yyyy, clear or handle as an error
-          formattedValue = ''; // Or show an error message
+          formattedValue = ""; // Or show an error message
         }
       } else {
         // Auto-add slashes for typing
         for (let i = 0; i < cleanValue.length; i++) {
-          if (i === 2 || i === 4) { // Add slash after day and month
-            formattedValue += '/';
+          if (i === 2 || i === 4) {
+            // Add slash after day and month
+            formattedValue += "/";
           }
           formattedValue += cleanValue[i];
         }
@@ -262,19 +264,24 @@ function InvoiceAdd() {
 
         // Convert Excel date number to JavaScript Date object, then format to dd/mm/yyyy
         let formattedInvoiceDate = "";
-        if (typeof invoiceDate === 'number') {
+        if (typeof invoiceDate === "number") {
           // Excel dates are numbers representing days since 1900-01-01.
           // 25569 is the number of days between 1900-01-01 and 1970-01-01, adjusted for Excel's 1900 leap year bug.
-          const date = new Date(Math.round((invoiceDate - 25569) * 86400 * 1000));
-          const day = String(date.getDate()).padStart(2, '0');
-          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const date = new Date(
+            Math.round((invoiceDate - 25569) * 86400 * 1000)
+          );
+          const day = String(date.getDate()).padStart(2, "0");
+          const month = String(date.getMonth() + 1).padStart(2, "0");
           const year = date.getFullYear();
           formattedInvoiceDate = `${day}/${month}/${year}`;
-        } else if (typeof invoiceDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)) {
-            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
+        } else if (
+          typeof invoiceDate === "string" &&
+          /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)
+        ) {
+          formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
         } else {
-            // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
-            formattedInvoiceDate = "";
+          // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
+          formattedInvoiceDate = "";
         }
 
         setInvoiceData({
@@ -309,7 +316,7 @@ function InvoiceAdd() {
       // Convert the displayed date (dd/mm/yyyy) to a backend-friendly format (e.g., YYYY-MM-DD)
       let dateForBackend = invoiceData.date;
       if (dateForBackend && /^\d{2}\/\d{2}\/\d{4}$/.test(dateForBackend)) {
-        const [day, month, year] = dateForBackend.split('/');
+        const [day, month, year] = dateForBackend.split("/");
         dateForBackend = `${year}-${month}-${day}`;
       } else {
         // Handle cases where the date might be empty or invalid after user input
@@ -407,14 +414,13 @@ function InvoiceAdd() {
             </div>
             <div className="field">
               <label className="label">Date</label>
-             <input
+              <input
                 type="text"
                 className="input"
                 id="date"
                 name="date"
                 value={invoiceData.date}
                 onChange={handleChange}
-                maxLength={10}
                 placeholder="dd/mm/yyyy"
               />
             </div>

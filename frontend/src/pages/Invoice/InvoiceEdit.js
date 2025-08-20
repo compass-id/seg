@@ -35,25 +35,27 @@ function InvoiceEdit() {
     const { name, value } = event.target;
 
     if (name === "date") {
-      let formattedValue = '';
-      const cleanValue = value.replace(/\D/g, ''); // Remove non-digits
+      let formattedValue = "";
+      const cleanValue = value.replace(/\D/g, ""); // Remove non-digits
 
       // Check if the pasted value already has slashes (e.g., from Excel import or manual paste)
-      const hasSlashes = value.includes('/');
+      const hasSlashes = value.includes("/");
 
       if (hasSlashes) {
         // If slashes are present, assume it's a pre-formatted paste
-        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) { // Validate dd/mm/yyyy format
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+          // Validate dd/mm/yyyy format
           formattedValue = value;
         } else {
           // If it has slashes but doesn't match dd/mm/yyyy, clear or handle as an error
-          formattedValue = ''; // Or show an error message
+          formattedValue = ""; // Or show an error message
         }
       } else {
         // Auto-add slashes for typing
         for (let i = 0; i < cleanValue.length; i++) {
-          if (i === 2 || i === 4) { // Add slash after day and month
-            formattedValue += '/';
+          if (i === 2 || i === 4) {
+            // Add slash after day and month
+            formattedValue += "/";
           }
           formattedValue += cleanValue[i];
         }
@@ -233,19 +235,24 @@ function InvoiceEdit() {
 
         // --- Start: Improved Excel Date to dd/mm/yyyy conversion ---
         let formattedInvoiceDate = "";
-        if (typeof invoiceDate === 'number') {
+        if (typeof invoiceDate === "number") {
           // Excel dates are numbers representing days since 1900-01-01.
           // 25569 is the number of days between 1900-01-01 and 1970-01-01, adjusted for Excel's 1900 leap year bug.
-          const date = new Date(Math.round((invoiceDate - 25569) * 86400 * 1000));
-          const day = String(date.getDate()).padStart(2, '0');
-          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const date = new Date(
+            Math.round((invoiceDate - 25569) * 86400 * 1000)
+          );
+          const day = String(date.getDate()).padStart(2, "0");
+          const month = String(date.getMonth() + 1).padStart(2, "0");
           const year = date.getFullYear();
           formattedInvoiceDate = `${day}/${month}/${year}`;
-        } else if (typeof invoiceDate === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)) {
-            formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
+        } else if (
+          typeof invoiceDate === "string" &&
+          /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)
+        ) {
+          formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
         } else {
-            // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
-            formattedInvoiceDate = "";
+          // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
+          formattedInvoiceDate = "";
         }
         // --- End: Improved Excel Date to dd/mm/yyyy conversion ---
 
@@ -281,7 +288,7 @@ function InvoiceEdit() {
       // 1. Convert the displayed date (dd/mm/yyyy) to a backend-friendly format (e.g., YYYY-MM-DD)
       let dateForBackend = invoiceData.date;
       if (dateForBackend && /^\d{2}\/\d{2}\/\d{4}$/.test(dateForBackend)) {
-        const [day, month, year] = dateForBackend.split('/');
+        const [day, month, year] = dateForBackend.split("/");
         dateForBackend = `${year}-${month}-${day}`;
       } else {
         // Handle cases where the date might be empty or invalid after user input
@@ -314,19 +321,19 @@ function InvoiceEdit() {
         // --- Start: Format fetched date to dd/mm/yyyy for display ---
         let fetchedDate = res.data.date;
         if (fetchedDate) {
-            // Attempt to parse the date string (assuming it might be YYYY-MM-DD from backend)
-            const dateObj = new Date(fetchedDate);
-            // Check if dateObj is a valid date (not 'Invalid Date')
-            if (!isNaN(dateObj.getTime())) {
-                const day = String(dateObj.getDate()).padStart(2, '0');
-                const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-                const year = dateObj.getFullYear();
-                fetchedDate = `${day}/${month}/${year}`;
-            } else {
-                fetchedDate = ""; // If parsing fails, clear the date
-            }
+          // Attempt to parse the date string (assuming it might be YYYY-MM-DD from backend)
+          const dateObj = new Date(fetchedDate);
+          // Check if dateObj is a valid date (not 'Invalid Date')
+          if (!isNaN(dateObj.getTime())) {
+            const day = String(dateObj.getDate()).padStart(2, "0");
+            const month = String(dateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+            const year = dateObj.getFullYear();
+            fetchedDate = `${day}/${month}/${year}`;
+          } else {
+            fetchedDate = ""; // If parsing fails, clear the date
+          }
         } else {
-            fetchedDate = ""; // If fetchedDate is null/undefined, clear it
+          fetchedDate = ""; // If fetchedDate is null/undefined, clear it
         }
         // --- End: Format fetched date to dd/mm/yyyy for display ---
 
@@ -396,7 +403,6 @@ function InvoiceEdit() {
                 name="date"
                 value={invoiceData.date}
                 onChange={handleChange}
-                maxLength={10}
                 placeholder="dd/mm/yyyy"
               />
             </div>
@@ -503,7 +509,9 @@ function InvoiceEdit() {
                         <option value="">--- Select Book ---</option>
                         <option value="-">[Custom Book Name]</option>
                         {books.map((item, i) => (
-                          <option key={i} value={item.isbn}>{item.name}</option>
+                          <option key={i} value={item.isbn}>
+                            {item.name}
+                          </option>
                         ))}
                       </select>
                     </>
