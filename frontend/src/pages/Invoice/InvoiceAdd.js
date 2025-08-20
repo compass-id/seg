@@ -32,6 +32,12 @@ function InvoiceAdd() {
     });
   };
 
+  const formatDate = (dateStr) => {
+    // Expecting input in "DD/MM/YYYY"
+    const [day, month, year] = dateStr.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
+
   const generateSerie = (count) => {
     const today = new Date();
     const month = today.getMonth() + 1;
@@ -226,15 +232,7 @@ function InvoiceAdd() {
 
         // Convert Excel date number to JavaScript Date object, then format to dd/mm/yyyy
         let formattedInvoiceDate = "";
-        if (
-          typeof invoiceDate === "string" &&
-          /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)
-        ) {
-          formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
-        } else {
-          // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
-          formattedInvoiceDate = "";
-        }
+        formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
 
         setInvoiceData({
           serie: invoiceNumber,
@@ -266,12 +264,6 @@ function InvoiceAdd() {
     e.preventDefault();
     try {
       // Convert the displayed date (dd/mm/yyyy) to a backend-friendly format (e.g., YYYY-MM-DD)
-
-      function formatDate(dateStr) {
-        // Expecting input in "DD/MM/YYYY"
-        const [day, month, year] = dateStr.split("/");
-        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-      }
 
       const formatDated = formatDate(invoiceData.date);
 

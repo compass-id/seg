@@ -125,6 +125,12 @@ function InvoiceEdit() {
     return bookir?.name;
   };
 
+  const formatDate = (dateStr) => {
+    // Expecting input in "DD/MM/YYYY"
+    const [day, month, year] = dateStr.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
+
   const handleFileImport = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -196,16 +202,7 @@ function InvoiceEdit() {
 
         // --- Start: Improved Excel Date to dd/mm/yyyy conversion ---
         let formattedInvoiceDate = "";
-        if (
-          typeof invoiceDate === "string" &&
-          /^\d{2}\/\d{2}\/\d{4}$/.test(invoiceDate)
-        ) {
-          formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
-        } else {
-          // If it's a string but not dd/mm/yyyy, or other unexpected type, clear it
-          formattedInvoiceDate = "";
-        }
-        // --- End: Improved Excel Date to dd/mm/yyyy conversion ---
+        formattedInvoiceDate = invoiceDate; // Already in dd/mm/yyyy format
 
         setInvoiceData({
           serie: invoiceNumber,
@@ -236,12 +233,6 @@ function InvoiceEdit() {
   const updInvoice = async (e) => {
     e.preventDefault();
     try {
-      function formatDate(dateStr) {
-        // Expecting input in "DD/MM/YYYY"
-        const [day, month, year] = dateStr.split("/");
-        return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-      }
-
       const formatDated = formatDate(invoiceData.date);
 
       const cleanedData = {
