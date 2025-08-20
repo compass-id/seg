@@ -77,7 +77,7 @@ function EventPartyEdit() {
           `https://seg-server.vercel.app/api/parties/id/${id}`
         ); // modify URL based on backend
         // navigate to main page
-        navigate(`/events`);
+        navigate(`/event-join-list/${id}`);
       } catch (error) {
         window.alert(error.message); // display error message
       }
