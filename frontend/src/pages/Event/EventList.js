@@ -150,7 +150,7 @@ const EventList = () => {
                 <img src={event.img} alt={event.img} />
                 <div className="section caption">
                   <h6 title={event.title}>
-                    <marquee direction="left" behavior="scroll">
+                    <marquee direction="right" behavior="scroll">
                       {event.title}
                     </marquee>
                   </h6>
@@ -182,7 +182,7 @@ const EventList = () => {
                   <button
                     onClick={() => navigate(`/event-view/${event._id}`)}
                     className="btn">
-                    DETAIL
+                    VIEW
                   </button>
                   <button
                     onClick={() => navigate(`/event-join-list/${event._id}`)}
