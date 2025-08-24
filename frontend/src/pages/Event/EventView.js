@@ -126,60 +126,72 @@ const EventView = () => {
           <div className="section">
             <div className="view" key={event._id}>
               <img src={event.img} alt={event.img} />
-              <p>
-                <strong>Role:</strong>
-              </p>
-              <p> {event.model}</p>
-              {event.start !== "" ? (
-                <>
-                  <p>
-                    <strong>Start:</strong>{" "}
-                    {event.type === "Registration"
-                      ? formatTime(event.start)
-                      : "-"}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p>
-                    <strong>Start:</strong> -
-                  </p>
-                </>
-              )}
-              {event.end !== "" ? (
-                <>
-                  <p>
-                    <strong>Finish:</strong>{" "}
-                    {event.type === "Registration"
-                      ? formatTime(event.end)
-                      : "-"}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p>
-                    <strong>Finish:</strong> -
-                  </p>
-                </>
-              )}
-              <p>
-                <strong>Price:</strong>
-              </p>
-              <p>{formatCurrency(event.price)}</p>
-              {event.address !== "" ? (
-                <>
-                  {" "}
-                  <p>
-                    <strong>Location:</strong>
-                  </p>
-                  <p>{event.address}</p>
-                </>
-              ) : (
-                ""
-              )}
 
               <div className="section caption">
                 <h4 title={event.title}>{event.title}</h4>
+                <br />
+                <br />
+                <p>
+                  <strong>Role:</strong>
+                </p>
+                <p> {event.model}</p>
+                <br />
+                <br />
+                {event.start !== "" ? (
+                  <>
+                    <p>
+                      <strong>Start:</strong>{" "}
+                      {event.type === "Registration"
+                        ? formatTime(event.start)
+                        : "-"}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      <strong>Start:</strong> -
+                    </p>
+                  </>
+                )}
+                <br />
+                <br />
+                {event.end !== "" ? (
+                  <>
+                    <p>
+                      <strong>Finish:</strong>{" "}
+                      {event.type === "Registration"
+                        ? formatTime(event.end)
+                        : "-"}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      <strong>Finish:</strong> -
+                    </p>
+                  </>
+                )}
+                <br />
+                <br />
+                <p>
+                  <strong>Price:</strong>
+                </p>
+                <p>{formatCurrency(event.price)}</p>
+                <br />
+                <br />
+                {event.address !== "" ? (
+                  <>
+                    {" "}
+                    <p>
+                      <strong>Location:</strong>
+                    </p>
+                    <p>{event.address}</p>
+                  </>
+                ) : (
+                  ""
+                )}
+                <br />
+                <br />
                 <p>
                   <strong>Description:</strong>
                 </p>
