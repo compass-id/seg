@@ -175,19 +175,14 @@ const EventList = () => {
                     {event.price !== "" ? formatCurrency(event.price) : "Free"}
                   </p>
                   <button
-                    onClick={() => navigate(`/event-edit/${event._id}`)}
-                    className="btn">
-                    EDIT
-                  </button>
-                  <button
                     onClick={() => navigate(`/event-view/${event._id}`)}
                     className="btn">
-                    DETAIL
+                    VIEW
                   </button>
                   <button
                     onClick={() => navigate(`/event-join-list/${event._id}`)}
                     className="btn">
-                    PARTICIPANT LIST
+                    DATA LIST
                   </button>
                 </div>
               </div>
