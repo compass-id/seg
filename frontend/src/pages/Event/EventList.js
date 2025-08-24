@@ -182,7 +182,12 @@ const EventList = () => {
                   <button
                     onClick={() => navigate(`/event-view/${event._id}`)}
                     className="btn">
-                    VIEW
+                    DETAIL
+                  </button>
+                  <button
+                    onClick={() => navigate(`/event-join-list/${event._id}`)}
+                    className="btn">
+                    DATA
                   </button>
                 </div>
               </div>

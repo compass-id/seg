@@ -131,19 +131,43 @@ const EventView = () => {
                 <p title={event.pic}>
                   <strong>Speaker:</strong>
                 </p>
-                <p> {event.pic}</p>
+                <p> {event.pic !== "" ? event.pic : "-"}</p>
                 <p>
                   <strong>Role:</strong>
                 </p>
                 <p> {event.model}</p>
-                <p>
-                  <strong>Start:</strong>
-                </p>
-                <p> {formatTime(event.start)}</p>
-                <p>
-                  <strong>Finish:</strong>
-                </p>
-                <p>{formatTime(event.end)}</p>
+                {event.start !== "" ? (
+                  <>
+                    <p>
+                      <strong>Start:</strong>{" "}
+                      {event.type === "Registration"
+                        ? formatTime(event.start)
+                        : "-"}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      <strong>Start:</strong> -
+                    </p>
+                  </>
+                )}
+                {event.end !== "" ? (
+                  <>
+                    <p>
+                      <strong>Finish:</strong>{" "}
+                      {event.type === "Registration"
+                        ? formatTime(event.end)
+                        : "-"}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      <strong>Finish:</strong> -
+                    </p>
+                  </>
+                )}
                 <p>
                   <strong>Price:</strong>
                 </p>
@@ -151,15 +175,14 @@ const EventView = () => {
                 <p>
                   <strong>Location:</strong>
                 </p>
-                <p>{event.address}</p>
+                <p>{event.address !== "" ? event.address : "-"}</p>
                 <p>
                   <strong>Description:</strong>
                 </p>
                 <pre>{event.desc}</pre>
                 <button
                   onClick={() => navigate(`/event-join-list/${event._id}`)}
-                  className="btn"
-                >
+                  className="btn">
                   VIEW PARTICIPANT
                 </button>
               </div>
