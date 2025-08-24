@@ -154,13 +154,25 @@ const EventList = () => {
                       {event.title}
                     </marquee>
                   </h6>
-                  <p>
-                    <strong>Time:</strong>{" "}
-                    {event.start !== "" ? formatTime(event.start) : "-"}
-                  </p>
+                  {event.start !== "" ? (
+                    <>
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {event.type === "Registration"
+                          ? formatTime(event.start)
+                          : "-"}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p>
+                        <strong>Date:</strong> -
+                      </p>
+                    </>
+                  )}
                   <p>
                     <strong>Price:</strong>{" "}
-                    {event.price === "" ? "Free" : formatCurrency(event.price)}
+                    {event.price !== "" ? formatCurrency(event.price) : "Free"}
                   </p>
                   <button
                     onClick={() => navigate(`/event-edit/${event._id}`)}

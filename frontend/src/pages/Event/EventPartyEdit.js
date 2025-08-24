@@ -63,7 +63,7 @@ function EventPartyEdit() {
       );
 
       // Navigate to main page
-      navigate(`/event-join-list/${id}`);
+      navigate(`/event-join-list/` + eventData.event);
     } catch (error) {
       window.alert(error.message); // Display error messages
     }
@@ -77,7 +77,7 @@ function EventPartyEdit() {
           `https://seg-server.vercel.app/api/parties/id/${id}`
         ); // modify URL based on backend
         // navigate to main page
-        navigate(`/event-join-list/${id}`);
+        navigate(`/event-join-list/` + eventData.event);
       } catch (error) {
         window.alert(error.message); // display error message
       }
