@@ -131,9 +131,8 @@ const EventView = () => {
                 <h4 title={event.title}>{event.title}</h4>
                 <br />
                 <p>
-                  <strong>Role:</strong>
+                  <strong>Role:</strong> {event.model}
                 </p>
-                <p> {event.model}</p>
                 <br />
                 {event.start !== "" ? (
                   <>
@@ -168,19 +167,16 @@ const EventView = () => {
                     </p>
                   </>
                 )}
-                <br />
                 <p>
-                  <strong>Price:</strong>
+                  <strong>Price:</strong> {formatCurrency(event.price)}
                 </p>
-                <p>{formatCurrency(event.price)}</p>
                 <br />
                 {event.address !== "" ? (
                   <>
-                    {" "}
                     <p>
-                      <strong>Location:</strong>
+                      <strong>Location:</strong>{" "}
+                      {event.address !== "" ? event.address : "-"}
                     </p>
-                    <p>{event.address}</p>
                   </>
                 ) : (
                   ""
