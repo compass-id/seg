@@ -130,12 +130,10 @@ const EventView = () => {
               <div className="section caption">
                 <h4 title={event.title}>{event.title}</h4>
                 <br />
-                <br />
                 <p>
                   <strong>Role:</strong>
                 </p>
                 <p> {event.model}</p>
-                <br />
                 <br />
                 {event.start !== "" ? (
                   <>
@@ -154,7 +152,6 @@ const EventView = () => {
                   </>
                 )}
                 <br />
-                <br />
                 {event.end !== "" ? (
                   <>
                     <p>
@@ -172,12 +169,10 @@ const EventView = () => {
                   </>
                 )}
                 <br />
-                <br />
                 <p>
                   <strong>Price:</strong>
                 </p>
                 <p>{formatCurrency(event.price)}</p>
-                <br />
                 <br />
                 {event.address !== "" ? (
                   <>
@@ -191,11 +186,11 @@ const EventView = () => {
                   ""
                 )}
                 <br />
-                <br />
                 <p>
                   <strong>Description:</strong>
                 </p>
                 <pre>{event.desc}</pre>
+                <br />
                 <button
                   onClick={() => navigate(`/event-edit/${event._id}`)}
                   className="btn">
