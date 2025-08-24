@@ -154,17 +154,9 @@ const EventList = () => {
                       {event.title}
                     </marquee>
                   </h6>
-                  <p title={event.pic}>
-                    <strong>Speaker:</strong>{" "}
-                    {event.pic === "" ? "-" : event.pic}
-                  </p>
                   <p>
                     <strong>Time:</strong>{" "}
-                    {event.start === "" ? "-" : formatTime(event.start)}
-                  </p>
-                  <p title={event.address}>
-                    <strong>Location:</strong>{" "}
-                    {event.address === "" ? "-" : event.address}
+                    {event.start !== "" ? formatTime(event.start) : "-"}
                   </p>
                   <p>
                     <strong>Price:</strong>{" "}
