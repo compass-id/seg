@@ -126,60 +126,69 @@ const EventView = () => {
           <div className="section">
             <div className="view" key={event._id}>
               <img src={event.img} alt={event.img} />
+              <p>
+                <strong>Role:</strong>
+              </p>
+              <p> {event.model}</p>
+              {event.start !== "" ? (
+                <>
+                  <p>
+                    <strong>Start:</strong>{" "}
+                    {event.type === "Registration"
+                      ? formatTime(event.start)
+                      : "-"}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>Start:</strong> -
+                  </p>
+                </>
+              )}
+              {event.end !== "" ? (
+                <>
+                  <p>
+                    <strong>Finish:</strong>{" "}
+                    {event.type === "Registration"
+                      ? formatTime(event.end)
+                      : "-"}
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>Finish:</strong> -
+                  </p>
+                </>
+              )}
+              <p>
+                <strong>Price:</strong>
+              </p>
+              <p>{formatCurrency(event.price)}</p>
+              {event.address !== "" ? (
+                <>
+                  {" "}
+                  <p>
+                    <strong>Location:</strong>
+                  </p>
+                  <p>{event.address}</p>
+                </>
+              ) : (
+                ""
+              )}
+
               <div className="section caption">
                 <h4 title={event.title}>{event.title}</h4>
-                <p title={event.pic}>
-                  <strong>Speaker:</strong>
-                </p>
-                <p> {event.pic !== "" ? event.pic : "-"}</p>
-                <p>
-                  <strong>Role:</strong>
-                </p>
-                <p> {event.model}</p>
-                {event.start !== "" ? (
-                  <>
-                    <p>
-                      <strong>Start:</strong>{" "}
-                      {event.type === "Registration"
-                        ? formatTime(event.start)
-                        : "-"}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      <strong>Start:</strong> -
-                    </p>
-                  </>
-                )}
-                {event.end !== "" ? (
-                  <>
-                    <p>
-                      <strong>Finish:</strong>{" "}
-                      {event.type === "Registration"
-                        ? formatTime(event.end)
-                        : "-"}
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      <strong>Finish:</strong> -
-                    </p>
-                  </>
-                )}
-                <p>
-                  <strong>Price:</strong>
-                </p>
-                <p>{formatCurrency(event.price)}</p>
-                <p>
-                  <strong>Location:</strong>
-                </p>
-                <p>{event.address !== "" ? event.address : "-"}</p>
                 <p>
                   <strong>Description:</strong>
                 </p>
                 <pre>{event.desc}</pre>
+                <button
+                  onClick={() => navigate(`/event-edit/${event._id}`)}
+                  className="btn">
+                  EDIT
+                </button>
                 <button
                   onClick={() => navigate(`/event-join-list/${event._id}`)}
                   className="btn">
