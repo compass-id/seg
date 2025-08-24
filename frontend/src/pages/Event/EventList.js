@@ -149,29 +149,35 @@ const EventList = () => {
               <div className="event" key={index}>
                 <img src={event.img} alt={event.img} />
                 <div className="section caption">
-                  <h6 title={event.title}>{event.title}</h6>
+                  <h6 title={event.title}>
+                    <marquee direction="left" behavior="scroll">
+                      {event.title}
+                    </marquee>
+                  </h6>
                   <p title={event.pic}>
-                    <strong>Speaker:</strong> {event.pic}
+                    <strong>Speaker:</strong>{" "}
+                    {event.pic === "" ? "-" : event.pic}
                   </p>
                   <p>
-                    <strong>Time:</strong> {formatTime(event.start)}
+                    <strong>Time:</strong>{" "}
+                    {event.start === "" ? "-" : formatTime(event.start)}
                   </p>
                   <p title={event.address}>
-                    <strong>Location:</strong> {event.address}
+                    <strong>Location:</strong>{" "}
+                    {event.address === "" ? "-" : event.address}
                   </p>
                   <p>
-                    <strong>Price:</strong> {formatCurrency(event.price)}
+                    <strong>Price:</strong>{" "}
+                    {event.price === "" ? "Free" : formatCurrency(event.price)}
                   </p>
                   <button
                     onClick={() => navigate(`/event-edit/${event._id}`)}
-                    className="btn"
-                  >
+                    className="btn">
                     EDIT
                   </button>
                   <button
                     onClick={() => navigate(`/event-view/${event._id}`)}
-                    className="btn"
-                  >
+                    className="btn">
                     VIEW
                   </button>
                 </div>
