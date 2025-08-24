@@ -133,7 +133,6 @@ const EventView = () => {
                 <p>
                   <strong>Role:</strong> {event.model}
                 </p>
-                <br />
                 {event.start !== "" ? (
                   <>
                     <p>
@@ -150,7 +149,6 @@ const EventView = () => {
                     </p>
                   </>
                 )}
-                <br />
                 {event.end !== "" ? (
                   <>
                     <p>
