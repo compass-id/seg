@@ -168,7 +168,6 @@ const EventView = () => {
                 <p>
                   <strong>Price:</strong> {formatCurrency(event.price)}
                 </p>
-                <br />
                 {event.address !== "" ? (
                   <>
                     <p>
@@ -187,7 +186,8 @@ const EventView = () => {
                 <br />
                 <button
                   onClick={() => navigate(`/event-edit/${event._id}`)}
-                  className="btn">
+                  className="btn"
+                  style={{ marginRight: "5px" }}>
                   EDIT
                 </button>
                 <button
