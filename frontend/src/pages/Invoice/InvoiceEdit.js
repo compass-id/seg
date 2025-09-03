@@ -125,12 +125,6 @@ function InvoiceEdit() {
     return bookir?.name;
   };
 
-  const formatDate = (dateStr) => {
-    // Expecting input in "DD/MM/YYYY"
-    const [day, month, year] = dateStr.split("/");
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-  };
-
   const handleFileImport = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -233,11 +227,8 @@ function InvoiceEdit() {
   const updInvoice = async (e) => {
     e.preventDefault();
     try {
-      const formatDated = formatDate(invoiceData.date);
-
       const cleanedData = {
         ...invoiceData,
-        date: formatDated, // Use the converted date for the backend
         bookList: invoiceData.bookList.filter(Boolean),
       };
 
