@@ -5,7 +5,7 @@ import asyncHandler from "express-async-handler";
 // get all books
 export const getBooks = asyncHandler(async (req, res) => {
   try {
-    const books = await Book.find().sort({ name: 1, category: 1 });
+    const books = await Book.find().sort({ name: 1, createdAt: 1 });
     if (!books) {
       res.status(404);
       throw new Error(`cannot find any book`);
@@ -22,7 +22,7 @@ export const getBookById = asyncHandler(async (req, res) => {
   try {
     const book = await Book.findById(req.params.id).sort({
       name: 1,
-      category: 1,
+      createdAt: 1,
     });
     if (!book) {
       res.status(404);
@@ -74,9 +74,9 @@ export const getPriceByIsbn = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
-        
-// Recommended Change:
-res.status(200).send(String(book.bookPrice)); // Sends the price as a plain string, e.g., "140000"
+
+    // Recommended Change:
+    res.status(200).send(String(book.bookPrice)); // Sends the price as a plain string, e.g., "140000"
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
@@ -92,8 +92,8 @@ export const getEPriceByIsbn = asyncHandler(async (req, res) => {
       throw new Error(`Cannot find book with ISBN: ${req.params.isbn}`);
     }
 
-// Recommended Change:
-res.status(200).send(String(book.ebookPrice)); // Or { unitPrice: book.ebookPrice }
+    // Recommended Change:
+    res.status(200).send(String(book.ebookPrice)); // Or { unitPrice: book.ebookPrice }
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
@@ -121,7 +121,7 @@ export const getBookByKey = asyncHandler(async (req, res) => {
           },
         },
       ],
-    }).sort({ name: 1, category: 1 });
+    }).sort({ name: 1, createdAt: 1 });
     if (!book) {
       res.status(404);
       throw new Error(`cannot find any book id`);
