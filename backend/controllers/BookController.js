@@ -5,7 +5,7 @@ import asyncHandler from "express-async-handler";
 // get all books
 export const getBooks = asyncHandler(async (req, res) => {
   try {
-    const books = await Book.find().sort({ name: 1, category: 1 });
+    const books = await Book.find().sort({ name: 1, createdAt: 1 });
     if (!books) {
       res.status(404);
       throw new Error(`cannot find any book`);
@@ -22,7 +22,7 @@ export const getBookById = asyncHandler(async (req, res) => {
   try {
     const book = await Book.findById(req.params.id).sort({
       name: 1,
-      category: 1,
+      createdAt: 1,
     });
     if (!book) {
       res.status(404);
@@ -121,7 +121,7 @@ export const getBookByKey = asyncHandler(async (req, res) => {
           },
         },
       ],
-    }).sort({ name: 1, category: 1 });
+    }).sort({ name: 1, createdAt: 1 });
     if (!book) {
       res.status(404);
       throw new Error(`cannot find any book id`);
