@@ -312,7 +312,7 @@ const QuotationList = () => {
                       <button
                         className="btn"
                         onClick={() =>
-                          (window.location.href = `https://github.com/competech-id/docs/raw/master/Quotation/${quotation.serie}.xlsx`)
+                          (window.location.href = `https://github.com/compass-id/docs/raw/main/Quotation/${quotation.serie}.xlsx`)
                         }
                         download>
                         GET XLSX

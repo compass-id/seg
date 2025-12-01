@@ -30,7 +30,7 @@ function Login() {
     <>
       <div className="section log-banner">
         <img
-          src="https://github.com/competech-id/seg/raw/master/frontend/public/favicon.ico"
+          src="https://github.com/compass-id/seg/raw/master/frontend/public/favicon.ico"
           alt=""
         />
         <div>

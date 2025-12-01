@@ -314,7 +314,7 @@ const InvoiceList = () => {
                       <button
                         className="btn"
                         onClick={() =>
-                          (window.location.href = `https://github.com/compass-id/docs/raw/master/Invoice/${invoice.serie}.xlsx`)
+                          (window.location.href = `https://github.com/compass-id/docs/raw/main/Invoice/${invoice.serie}.xlsx`)
                         }
                         download>
                         GET XLSX
