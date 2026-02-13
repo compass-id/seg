@@ -1,0 +1,1216 @@
+* {
+  box-sizing: border-box;
+  margin: auto;
+  padding: auto;
+  clear: both;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.lang button {
+  width: auto;
+  height: auto;
+  display: inline-block;
+  overflow: hidden;
+  background: #eee;
+  color: #111;
+  margin: auto;
+  margin-left: 8px;
+  border-radius: 5px;
+  padding: 2px 10px;
+}
+
+.lang button {
+  width: auto;
+  height: auto;
+  display: inline-block;
+  overflow: hidden;
+  background: #eee;
+  color: #111;
+  margin: auto;
+  margin-left: 8px;
+  border-radius: 5px;
+  padding: 2px 10px;
+}
+
+.lang button.active {
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+}
+
+pre {
+  white-space: break-spaces;
+}
+
+.black {
+  color: #fff;
+  background: #222;
+}
+
+a,
+button {
+  cursor: pointer;
+  text-transform: uppercase;
+  border: 1px hidden;
+  text-decoration: none;
+}
+
+textarea {
+  width: 100%;
+  min-height: 200px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.5em;
+}
+
+h2 {
+  font-size: 2.25em;
+}
+
+h3 {
+  font-size: 2em;
+}
+
+h4 {
+  font-size: 1.75em;
+}
+
+h5 {
+  font-size: 1.5em;
+}
+
+h6 {
+  font-size: 1.25em;
+}
+
+p {
+  font-size: 1em;
+}
+
+body {
+  background: #fff;
+  color: #222;
+}
+
+.section {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+@media only screen and (min-width: 601px) {
+  .posts,
+  .posts .film,
+  .posts .film .panel,
+  .posts .film img {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+  }
+
+  .posts .film img {
+    border: 1px solid #111;
+    margin: 10px auto;
+  }
+
+  .posts .film .panel {
+    white-space: nowrap;
+    overflow-x: scroll;
+  }
+
+  .posts .film .panel img {
+    width: 10%;
+    height: 80px;
+    display: inline-block;
+    margin: 10px 5px;
+    vertical-align: top;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .party {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: auto;
+  }
+
+  .party .right {
+    width: 60%;
+    height: auto;
+    overflow: hidden;
+    display: inline-block;
+    margin: auto 1.5rem;
+  }
+
+  .party .left {
+    width: 30%;
+    height: auto;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
+    margin: auto 2rem;
+    text-align: right;
+  }
+
+  .party .left img {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border: 1px solid #111;
+  }
+
+  .view {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+  }
+
+  .view img {
+    width: 30%;
+    height: auto;
+    display: inline-block;
+    overflow: hidden;
+    object-fit: cover;
+    object-position: center;
+    vertical-align: top;
+    border: 1px solid #111;
+  }
+
+  .party .caption {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+  }
+
+  .party .caption h4,
+  .party .caption h6,
+  .party .caption p,
+  .party .caption label,
+  .party .caption pre {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: 10px auto;
+    white-space: break-spaces;
+  }
+
+  .party .form .field {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .party .caption h1,
+  .party .caption h4,
+  .party .caption h5,
+  .party .caption p,
+  .party .caption label {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: 12px auto;
+  }
+
+  .view .caption {
+    width: 60%;
+    height: auto;
+    display: inline-block;
+    overflow: hidden;
+    margin: auto 2rem;
+    vertical-align: top;
+    border: 1px solid #111;
+    padding: 1rem 2rem;
+  }
+
+  .view .caption textarea {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border: 1px hidden;
+    font-size: 1em;
+    resize: none;
+    color: #111;
+  }
+
+  .view .caption h1,
+  .view .caption h4,
+  .view .caption h5,
+  .view .caption p,
+  .view .caption label {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: 12px auto;
+  }
+
+  .view .btn {
+    display: inline-block;
+    margin: 2rem auto;
+    padding: 10px 35px;
+    border: 1px hidden;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .view .btn:hover {
+    background: #004;
+  }
+
+  .view .btn:nth-child(odd) {
+    margin-left: 5px;
+  }
+
+  .view .btn:nth-child(even) {
+    margin-right: 5px;
+  }
+
+  .view pre {
+    width: 100%;
+    height: 150px;
+    display: block;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  .event {
+    width: 30%;
+    height: auto;
+    display: inline-block;
+    overflow: hidden;
+    border: 1px solid #111;
+    margin: 10px 10px;
+  }
+
+  .event img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border: 1px solid #111;
+  }
+
+  .event .caption {
+    width: 90%;
+    height: auto;
+    overflow: hidden;
+    display: block;
+  }
+
+  .event .caption h4,
+  .event .caption h6,
+  .event .caption p,
+  .event .caption label {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 12px auto;
+  }
+
+  .event .btn {
+    display: inline-block;
+    margin: 1rem auto;
+    padding: 10px 35px;
+    border: 1px hidden;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .event .btn:hover {
+    background: #004;
+  }
+
+  .event .btn:nth-child(even) {
+    margin-right: 5px;
+  }
+
+  .event .btn:nth-child(odd) {
+    margin-left: 5px;
+  }
+
+  .log-banner img {
+    display: inline-block;
+    width: 6rem;
+    height: 6rem;
+    margin: 1rem 1rem;
+    vertical-align: middle;
+  }
+
+  .log-banner div {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .main-page {
+    width: 90%;
+    height: auto;
+    display: block;
+    margin-top: 4rem;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  .navbar {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #004;
+    color: #fff;
+    border: 1px hidden;
+    z-index: 9999;
+  }
+
+  .navbar button {
+    text-decoration: none;
+    font-weight: bold;
+    color: #ddd;
+    background: transparent;
+    border: 1px hidden;
+  }
+
+  .navbar #logo {
+    display: inline-block;
+    margin: 1rem 5rem;
+    font-weight: bold;
+  }
+
+  .navbar .tabs {
+    float: right;
+    display: block;
+    text-align: left;
+    overflow: hidden;
+    margin-right: 4rem;
+  }
+
+  .navbar .tabs button {
+    display: inline-block;
+    margin: 0.5rem auto;
+    padding: 0.5rem 1rem;
+  }
+
+  .navbar .tabs button i {
+    margin-right: 6px;
+  }
+
+  .navbar .tabs #menu {
+    visibility: hidden;
+  }
+
+  .headline {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border-bottom: 1px solid #222;
+  }
+
+  .headline h4 {
+    display: inline-block;
+  }
+
+  .headline .btn {
+    float: right;
+    text-decoration: none;
+    color: #222;
+    border-radius: 5px;
+    padding: 7px 20px;
+    font-weight: bold;
+    background: #fff;
+    border: 1px solid #222;
+  }
+
+  .headline .btn:hover {
+    background: #ccc;
+  }
+
+  .frame {
+    border-collapse: collapse;
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border: 1px solid #222;
+    table-layout: auto;
+  }
+
+  .table tr:hover {
+    background: #ddd;
+    color: #222;
+  }
+
+  .table thead {
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
+
+  .table td,
+  .table th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px 15px;
+    border: 1px solid #222;
+  }
+
+  .table tr th,
+  .table thead {
+    background: #222;
+    color: #fff;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  .table button {
+    border: 1px solid #222;
+    padding: 5px 15px;
+    margin: 5px 10px;
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  .table button:nth-child(even) {
+    background: #222;
+    color: #fff;
+  }
+
+  .table button:nth-child(odd) {
+    color: #222;
+  }
+
+  .table::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .table::-webkit-scrollbar-track {
+    border: 1px solid #999;
+  }
+
+  .table::-webkit-scrollbar-thumb {
+    background: #999;
+  }
+
+  .table::-webkit-scrollbar-thumb:hover {
+    background: #004;
+  }
+
+  .form {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .form .field {
+    display: inline-block;
+    overflow: hidden;
+    width: 50%;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .form .field-half,
+  .form .controls {
+    display: block;
+    overflow: hidden;
+  }
+
+  .form .field input[type="text"],
+  .form .field input[type="number"],
+  .form .field input[type="date"],
+  .form .field input[type="password"],
+  .form .field input[type="datetime-local"],
+  .form .field input[type="file"],
+  .form .field textarea,
+  .form .field select,
+  .form .field-half select,
+  .headline input[type="text"] {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px 15px;
+    margin: 10px auto;
+    background: #fff;
+    color: #222;
+    border: 1px solid #222;
+    border-radius: 5px;
+  }
+
+  .form .controls {
+    text-align: right;
+    padding: 1rem 1rem;
+  }
+
+  .form .controls button {
+    display: inline-block;
+    margin: 1rem auto;
+    margin-left: 1rem;
+    padding: 10px 35px;
+    border: 1px hidden;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+  }
+
+  .form .controls button:hover {
+    background: #004;
+    color: #fff;
+  }
+
+  .card {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: block;
+    border: 1px solid #111;
+  }
+
+  .card .section {
+    width: 95%;
+  }
+
+  .card p {
+    width: 33%;
+    height: auto;
+    display: inline-block;
+    overflow: hidden;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 5px auto;
+  }
+
+  .card a {
+    text-transform: lowercase;
+    text-decoration: none;
+  }
+
+  .card .btn {
+    text-decoration: none;
+    color: #222;
+    border-radius: 5px;
+    padding: 7px 20px;
+    font-weight: bold;
+    background: #eee;
+    border: 1px solid #222;
+    display: inline-block;
+    margin: auto 5px;
+    text-transform: uppercase;
+  }
+
+  .card span {
+    font-weight: bold;
+  }
+
+  .card table {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border-collapse: collapse;
+    margin: auto;
+  }
+
+  .card table tr th,
+  .card table thead {
+    background: #222;
+    color: #fff;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  .card table tr:hover {
+    background: #ddd;
+    color: #222;
+  }
+
+  .card table thead {
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
+
+  .card table td,
+  .card table th {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px 15px;
+    border: 1px solid #222;
+  }
+
+  .sit {
+    font-size: 0.7em;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .posts,
+  .posts .film,
+  .posts .film .panel,
+  .posts .film img {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+  }
+
+  .posts .film img {
+    border: 1px solid #111;
+    margin: 10px auto;
+  }
+
+  .posts .film .panel {
+    white-space: nowrap;
+    overflow-x: scroll;
+  }
+
+  .posts .film .panel img {
+    width: 15%;
+    height: 50px;
+    display: inline-block;
+    margin: 10px 5px;
+    vertical-align: top;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .party {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: auto;
+  }
+
+  .party .right {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: block;
+  }
+
+  .party .left {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: block;
+  }
+
+  .party .left img {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border: 1px solid #111;
+  }
+
+  .party .caption h1,
+  .party .caption h4,
+  .party .caption h5,
+  .party .caption p,
+  .party .caption label {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: 12px auto;
+  }
+
+  .view {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+  }
+
+  .view img {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    object-fit: cover;
+    object-position: center;
+    border: 1px solid #111;
+  }
+
+  .view .caption {
+    width: 95%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: 1rem auto;
+  }
+
+  .view .caption pre {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border: 1px hidden;
+    font-size: 1em;
+    resize: none;
+    color: #111;
+  }
+
+  .view .caption h1,
+  .view .caption h4,
+  .view .caption h5,
+  .view .caption p,
+  .view .caption label {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    margin: 12px auto;
+  }
+
+  .view .btn {
+    display: inline-block;
+    margin: 2rem auto;
+    padding: 10px 35px;
+    border: 1px hidden;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .view .btn:hover {
+    background: #004;
+  }
+
+  .view .btn:nth-child(odd) {
+    margin-left: 5px;
+  }
+
+  .view .btn:nth-child(even) {
+    margin-right: 5px;
+  }
+
+  .event {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border: 1px solid #111;
+    margin: 1.5rem auto;
+  }
+
+  .event img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border: 1px solid #111;
+  }
+
+  .event .caption {
+    width: 90%;
+    height: auto;
+    overflow: hidden;
+    display: block;
+  }
+
+  .event .caption h6,
+  .event .caption h5,
+  .event .caption p,
+  .event .caption label {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 12px auto;
+  }
+
+  .event .btn {
+    display: inline-block;
+    margin: 1rem auto;
+    padding: 10px 35px;
+    border: 1px hidden;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .event .btn:hover {
+    background: #004;
+  }
+
+  .event .btn:nth-child(even) {
+    margin-right: 5px;
+  }
+
+  .event .btn:nth-child(odd) {
+    margin-left: 5px;
+  }
+
+  .log-banner {
+    margin: 2rem auto;
+  }
+
+  .log-banner img {
+    display: inline-block;
+    width: 4rem;
+    height: 4rem;
+    margin: 10px;
+    vertical-align: middle;
+    border: 1px solid #111;
+  }
+
+  .log-banner div {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .main-page {
+    width: 98%;
+    height: auto;
+    display: block;
+    margin: 3rem auto;
+    padding: 20px;
+    overflow: hidden;
+  }
+
+  .navbar {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #004;
+    color: #fff;
+    border: 1px hidden;
+    text-align: left;
+    z-index: 9999;
+  }
+
+  .navbar button {
+    text-decoration: none;
+    font-weight: bold;
+    color: #ddd;
+    background: transparent;
+    border: 1px hidden;
+  }
+
+  .navbar #logo {
+    display: inline-block;
+    margin: 1rem 1rem;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .navbar .tabs {
+    background: #004;
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    white-space: nowrap;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .navbar .tabs button {
+    width: 20%;
+    height: auto;
+    display: inline-block;
+  }
+
+  .navbar .tabs button span,
+  .navbar .tabs button i {
+    display: block;
+  }
+
+  .navbar .tabs button span {
+    margin-top: 5px;
+    font-size: 5pt;
+  }
+
+  .navbar .tabs button i {
+    font-size: 16pt;
+  }
+
+  .headline {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    border-bottom: 1px solid #222;
+  }
+
+  .headline h4 {
+    display: inline-block;
+  }
+
+  .headline .btn {
+    float: right;
+    text-decoration: none;
+    color: #222;
+    border-radius: 5px;
+    padding: 7px 20px;
+    font-weight: bold;
+    background: #fff;
+    border: 1px solid #222;
+  }
+
+  .headline .btn:hover {
+    background: #ccc;
+  }
+
+  .frame {
+    border-collapse: collapse;
+    width: 100%;
+    height: 60vh;
+    display: block;
+    overflow: scroll;
+    white-space: nowrap;
+    border: 1px solid #222;
+  }
+
+  .table tr:hover {
+    background: #ddd;
+    color: #222;
+  }
+
+  .table thead {
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
+
+  .table td,
+  .table th {
+    overflow: hidden;
+    padding: 10px 15px;
+    border: 1px solid #222;
+  }
+
+  .table tr th,
+  .table thead {
+    background: #222;
+    color: #fff;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  .table button {
+    border: 1px solid #222;
+    padding: 5px 15px;
+    margin: 5px 10px;
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  .table button:nth-child(even) {
+    background: #222;
+    color: #fff;
+  }
+
+  .table button:nth-child(odd) {
+    color: #222;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  .form {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .form .field {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+  }
+
+  .form .field-half,
+  .form .controls {
+    display: block;
+    overflow: hidden;
+  }
+
+  .form .field input[type="text"],
+  .form .field input[type="number"],
+  .form .field input[type="date"],
+  .form .field input[type="file"],
+  .form .field input[type="password"],
+  .form .field input[type="datetime-local"],
+  .form .field textarea,
+  .form .field select,
+  .form .field-half select,
+  .headline input[type="text"] {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 10px 15px;
+    margin: 10px auto;
+    background: #fff;
+    color: #222;
+    border: 1px solid #222;
+    border-radius: 5px;
+  }
+
+  .form .controls {
+    text-align: right;
+  }
+
+  .form .controls button {
+    width: 43.5%;
+    display: inline-block;
+    margin: 10px 10px;
+    padding: 15px 15px;
+    border: 1px hidden;
+    border-radius: 5px;
+    background: #222;
+    color: #fff;
+  }
+
+  .form .controls button:hover {
+    background: #004;
+    color: #fff;
+  }
+
+  .card {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    display: block;
+    border: 1px solid #111;
+  }
+
+  .card .section {
+    width: 95%;
+  }
+
+  .card p {
+    width: auto;
+    height: auto;
+    display: block;
+    overflow: hidden;
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 5px 10px;
+  }
+
+  .card a {
+    text-transform: lowercase;
+    text-decoration: none;
+  }
+
+  .card span {
+    font-weight: bold;
+  }
+
+  .card table {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: scroll;
+    border-collapse: collapse;
+    margin: auto;
+    white-space: nowrap;
+  }
+
+  .card table tr:hover {
+    background: #ddd;
+    color: #222;
+  }
+
+  .card table thead {
+    position: sticky;
+    top: 0;
+    left: 0;
+  }
+
+  .card table td,
+  .card table th {
+    overflow: hidden;
+    padding: 10px 15px;
+    border: 1px solid #222;
+  }
+
+  .card table tr th,
+  .card table thead {
+    background: #222;
+    color: #fff;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  .card .btn {
+    text-decoration: none;
+    color: #222;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-weight: bold;
+    background: #eee;
+    border: 1px solid #222;
+    display: inline-block;
+    text-transform: capitalize;
+    margin-right: 10px;
+    margin-top: 10px;
+    font-size: smaller;
+  }
+}
