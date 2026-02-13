@@ -208,7 +208,7 @@ function QuotationAdd() {
     };
 
     getBooks();
-  }, [quotationData]);
+  }, []);
 
   return (
     <>

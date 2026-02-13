@@ -206,7 +206,7 @@ const OrderAdd = () => {
     };
 
     getBooks();
-  }, [orderData]);
+  }, []);
 
   return (
     <>
