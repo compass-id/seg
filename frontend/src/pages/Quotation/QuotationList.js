@@ -46,31 +46,44 @@ const QuotationList = () => {
   }
 
   // Function to handle XLSX Printing via PHP Native API
+  // Inside your component...
   const handlePrintXlsx = async (quotation) => {
     try {
-      // REPLACE THIS URL with your actual PHP file path
-      const apiUrl =
-        "https://compasspubindonesia.com/media/api/quotation/print_xlsx.php";
+      const response = await axios.post(
+        "https://compasspubindonesia.com/media/api/quotation/print_xlsx.php",
+        quotation,
+        {
+          responseType: "blob", // Important
+        },
+      );
 
-      const response = await axios.post(apiUrl, quotation, {
-        responseType: "blob", // Important: response is a binary file
-      });
-
-      // Create a blob URL to trigger the download
+      // Create download link
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      // Set the filename
-      link.setAttribute("download", `Quotation_${quotation.serie}.xlsx`);
+      link.setAttribute("download", `Quotation_${quotation.quote_number}.xlsx`);
       document.body.appendChild(link);
       link.click();
-
-      // Cleanup
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      link.remove();
     } catch (error) {
-      console.error("Error generating XLSX:", error);
-      window.alert("Failed to generate XLSX. Please check the API connection.");
+      console.error("Download Error:", error);
+
+      // This part extracts the real error message from the PHP Blob
+      if (error.response && error.response.data instanceof Blob) {
+        const errorBlob = error.response.data;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const errorObj = JSON.parse(reader.result);
+            alert("Error: " + errorObj.error); // Shows the REAL PHP error
+          } catch (e) {
+            alert("An unknown error occurred.");
+          }
+        };
+        reader.readAsText(errorBlob);
+      } else {
+        alert("Failed to connect to the server.");
+      }
     }
   };
 
