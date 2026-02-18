@@ -47,43 +47,88 @@ const QuotationList = () => {
 
   // Function to handle XLSX Printing via PHP Native API
   // Inside your component...
+  // Function to handle XLSX Printing via PHP Native API
   const handlePrintXlsx = async (quotation) => {
     try {
-      const response = await axios.post(
-        "https://compasspubindonesia.com/media/api/quotation/print_xlsx.php",
-        quotation,
-        {
-          responseType: "blob", // Important
+      // Show loading state (optional)
+      setIsLoading(true);
+
+      // Make sure the URL is correct - update this to your actual PHP file location
+      const apiUrl =
+        "https://compasspubindonesia.com/media/api/quotation/print_xlsx.php";
+
+      console.log("Sending quotation data:", quotation); // For debugging
+
+      const response = await axios.post(apiUrl, quotation, {
+        responseType: "blob",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        timeout: 30000, // 30 second timeout
+      });
+
+      // Check if response is actually an error (JSON error message)
+      if (response.data.type === "application/json") {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const errorObj = JSON.parse(reader.result);
+            alert("Error: " + errorObj.error);
+          } catch (e) {
+            alert("An unknown error occurred.");
+          }
+        };
+        reader.readAsText(response.data);
+        return;
+      }
 
       // Create download link
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `Quotation_${quotation.quote_number}.xlsx`);
+      link.setAttribute(
+        "download",
+        `Quotation_${quotation.quote_number || quotation.serie}.xlsx`,
+      );
       document.body.appendChild(link);
       link.click();
       link.remove();
+
+      // Clean up
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Download Error:", error);
 
-      // This part extracts the real error message from the PHP Blob
+      // Handle network errors
+      if (!error.response) {
+        alert(
+          "Failed to connect to the server. Please check if the API is accessible.",
+        );
+        return;
+      }
+
+      // Handle blob error responses
       if (error.response && error.response.data instanceof Blob) {
         const errorBlob = error.response.data;
         const reader = new FileReader();
         reader.onload = () => {
           try {
             const errorObj = JSON.parse(reader.result);
-            alert("Error: " + errorObj.error); // Shows the REAL PHP error
+            alert("Error: " + errorObj.error);
           } catch (e) {
-            alert("An unknown error occurred.");
+            // If it's not JSON, show the raw error
+            alert("Error: " + reader.result);
           }
         };
         reader.readAsText(errorBlob);
       } else {
-        alert("Failed to connect to the server.");
+        alert(
+          "Failed to generate XLSX. Error: " +
+            (error.message || "Unknown error"),
+        );
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
