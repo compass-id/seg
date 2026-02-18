@@ -20,7 +20,7 @@ const QuotationList = () => {
 
   // Capitalize the first letter of each word
   const capitalizedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+    (word) => word.charAt(0).toUpperCase() + word.slice(1),
   );
 
   // Join the capitalized words back into a string
@@ -44,6 +44,93 @@ const QuotationList = () => {
     // use toLocaleString() with the defined options
     return new Intl.NumberFormat("id-ID", options).format(number);
   }
+
+  // Function to handle XLSX Printing via PHP Native API
+  // Inside your component...
+  // Function to handle XLSX Printing via PHP Native API
+  const handlePrintXlsx = async (quotation) => {
+    try {
+      // Show loading state (optional)
+      setIsLoading(true);
+
+      // Make sure the URL is correct - update this to your actual PHP file location
+      const apiUrl =
+        "https://compasspubindonesia.com/media/api/quotation/print_xlsx.php";
+
+      console.log("Sending quotation data:", quotation); // For debugging
+
+      const response = await axios.post(apiUrl, quotation, {
+        responseType: "blob",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        timeout: 30000, // 30 second timeout
+      });
+
+      // Check if response is actually an error (JSON error message)
+      if (response.data.type === "application/json") {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const errorObj = JSON.parse(reader.result);
+            alert("Error: " + errorObj.error);
+          } catch (e) {
+            alert("An unknown error occurred.");
+          }
+        };
+        reader.readAsText(response.data);
+        return;
+      }
+
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `Quotation_${quotation.quote_number || quotation.serie}.xlsx`,
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      // Clean up
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download Error:", error);
+
+      // Handle network errors
+      if (!error.response) {
+        alert(
+          "Failed to connect to the server. Please check if the API is accessible.",
+        );
+        return;
+      }
+
+      // Handle blob error responses
+      if (error.response && error.response.data instanceof Blob) {
+        const errorBlob = error.response.data;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const errorObj = JSON.parse(reader.result);
+            alert("Error: " + errorObj.error);
+          } catch (e) {
+            // If it's not JSON, show the raw error
+            alert("Error: " + reader.result);
+          }
+        };
+        reader.readAsText(errorBlob);
+      } else {
+        alert(
+          "Failed to generate XLSX. Error: " +
+            (error.message || "Unknown error"),
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // setting up useEffect to do tasks in real-time
 
@@ -75,7 +162,7 @@ const QuotationList = () => {
                 case "lastMonth":
                   const lastMonthDate = new Date(
                     now.getFullYear(),
-                    now.getMonth() - 1
+                    now.getMonth() - 1,
                   );
                   return (
                     quotationDate.getMonth() === lastMonthDate.getMonth() &&
@@ -105,7 +192,7 @@ const QuotationList = () => {
 
           const filteredQuotations = filterQuotationsByDateRange(
             datas.data,
-            filter
+            filter,
           );
 
           setQuotations(filteredQuotations);
@@ -134,7 +221,7 @@ const QuotationList = () => {
                 case "lastMonth":
                   const lastMonthDate = new Date(
                     now.getFullYear(),
-                    now.getMonth() - 1
+                    now.getMonth() - 1,
                   );
                   return (
                     quotationDate.getMonth() === lastMonthDate.getMonth() &&
@@ -164,7 +251,7 @@ const QuotationList = () => {
 
           const filteredQuotations = filterQuotationsByDateRange(
             datas.data,
-            filter
+            filter,
           );
 
           setQuotations(filteredQuotations);
@@ -311,10 +398,7 @@ const QuotationList = () => {
                     <p>
                       <button
                         className="btn"
-                        onClick={() =>
-                          (window.location.href = `https://github.com/compass-id/docs/raw/main/Quotation/${quotation.serie}.xlsx`)
-                        }
-                        download>
+                        onClick={() => handlePrintXlsx(quotation)}>
                         GET XLSX
                       </button>
                       <button
@@ -379,8 +463,8 @@ const QuotationList = () => {
                             sum +
                             (book.price - book.price * (book.disc / 100)) *
                               book.qty,
-                          0
-                        )
+                          0,
+                        ),
                       )}
                     </p>
                     {!quotation.sales ? (
@@ -413,7 +497,7 @@ const QuotationList = () => {
                         <td>
                           {formatCurrency(
                             book.price * book.qty -
-                              book.price * book.qty * (book.disc / 100)
+                              book.price * book.qty * (book.disc / 100),
                           )}
                         </td>
                       </tr>
