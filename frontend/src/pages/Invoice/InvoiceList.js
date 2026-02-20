@@ -257,7 +257,7 @@ const InvoiceList = () => {
               "_blank",
             )
           }
-          className="btn">
+          className="active">
           Print All to Xlsx
         </button>
       </div>
