@@ -20,7 +20,7 @@ const InvoiceList = () => {
 
   // Capitalize the first letter of each word
   const capitalizedWords = words.map(
-    (word) => word.charAt(0).toUpperCase() + word.slice(1)
+    (word) => word.charAt(0).toUpperCase() + word.slice(1),
   );
 
   // Join the capitalized words back into a string
@@ -75,7 +75,7 @@ const InvoiceList = () => {
                 case "lastMonth":
                   const lastMonthDate = new Date(
                     now.getFullYear(),
-                    now.getMonth() - 1
+                    now.getMonth() - 1,
                   );
                   return (
                     invoiceDate.getMonth() === lastMonthDate.getMonth() &&
@@ -105,7 +105,7 @@ const InvoiceList = () => {
 
           const filteredInvoices = filterInvoicesByDateRange(
             datas.data,
-            filter
+            filter,
           );
 
           setInvoices(filteredInvoices);
@@ -134,7 +134,7 @@ const InvoiceList = () => {
                 case "lastMonth":
                   const lastMonthDate = new Date(
                     now.getFullYear(),
-                    now.getMonth() - 1
+                    now.getMonth() - 1,
                   );
                   return (
                     invoiceDate.getMonth() === lastMonthDate.getMonth() &&
@@ -164,7 +164,7 @@ const InvoiceList = () => {
 
           const filteredInvoices = filterInvoicesByDateRange(
             datas.data,
-            filter
+            filter,
           );
 
           setInvoices(filteredInvoices);
@@ -209,6 +209,16 @@ const InvoiceList = () => {
     <>
       <div className="section headline">
         <h4>Invoice List</h4>
+        <button
+          onClick={() =>
+            window.open(
+              `https://compasspubindonesia.com/media/api/invoice/export.php?search=${search}`,
+              "_blank",
+            )
+          }
+          className="btn">
+          Print All to Xlsx
+        </button>
         <button onClick={() => navigate(`/invoice-add`)} className="btn">
           Add Invoice
         </button>
@@ -381,8 +391,8 @@ const InvoiceList = () => {
                             sum +
                             (book.price - book.price * (book.disc / 100)) *
                               book.qty,
-                          0
-                        )
+                          0,
+                        ),
                       )}
                     </p>
                     {!invoice.sales ? (
@@ -417,7 +427,7 @@ const InvoiceList = () => {
                         <td>
                           {formatCurrency(
                             book.price * book.qty -
-                              book.price * book.qty * (book.disc / 100)
+                              book.price * book.qty * (book.disc / 100),
                           )}
                         </td>
                       </tr>

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import * as XLSX from "xlsx";
 
 // create the main function
 const QuotationEdit = () => {
@@ -29,7 +30,7 @@ const QuotationEdit = () => {
   const delquotation = async () => {
     try {
       await axios.delete(
-        `https://seg-server.vercel.app/api/quotations/id/${id}`
+        `https://seg-server.vercel.app/api/quotations/id/${id}`,
       ); // modify URL based on backend
       // navigate to main page
       navigate(`/quotations`);
@@ -51,7 +52,7 @@ const QuotationEdit = () => {
       // Add the quotation into database with axios
       await axios.patch(
         `https://seg-server.vercel.app/api/quotations/id/${id}`,
-        cleanedData
+        cleanedData,
       );
       // Navigate to main page
       navigate(`/quotations`);
@@ -67,7 +68,7 @@ const QuotationEdit = () => {
       try {
         // get all the datas from database with axios
         const res = await axios.get(
-          `https://seg-server.vercel.app/api/quotations/id/${id}`
+          `https://seg-server.vercel.app/api/quotations/id/${id}`,
         );
 
         // input all the datas into useState
@@ -105,18 +106,18 @@ const QuotationEdit = () => {
         ) {
           const bame = document.getElementById("bame-" + index);
           const hed = document.getElementById("hed-" + index);
-          hed.style = "display: none";
-          bame.style = "display: block";
+          if (hed) hed.style = "display: none";
+          if (bame) bame.style = "display: block";
         } else if (selectedBook) {
           const bame = document.getElementById("bame-" + index);
           const hed = document.getElementById("hed-" + index);
-          hed.style = "display: block";
-          bame.style = "display: none";
+          if (hed) hed.style = "display: block";
+          if (bame) bame.style = "display: none";
         } else if (!selectedBook) {
           const bame = document.getElementById("bame-" + index);
           const hed = document.getElementById("hed-" + index);
-          hed.style = "display: none";
-          bame.style = "display: block";
+          if (hed) hed.style = "display: none";
+          if (bame) bame.style = "display: block";
         }
       });
     };
@@ -131,6 +132,132 @@ const QuotationEdit = () => {
     });
   };
 
+  const findBooks = (value, sample) => {
+    const coded = String(value);
+    const bookir = sample.find((book) => book.isbn === coded);
+    return bookir?.name;
+  };
+
+  const handleFileImport = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+          header: 1,
+          defval: "",
+        });
+
+        if (jsonData.length < 24) {
+          throw new Error(
+            "The Excel file doesn't match the expected format. Please use the correct template.",
+          );
+        }
+
+        const getCellValue = (row, col) => {
+          return jsonData[row]?.[col] || "";
+        };
+
+        const customerName = getCellValue(6, 1);
+        const invoiceNumber = getCellValue(4, 4);
+        const invoiceDate = getCellValue(4, 6);
+        const companyAddress = getCellValue(6, 3);
+        const email = getCellValue(9, 1);
+        const phone = getCellValue(11, 1);
+
+        const bookList = [];
+        let row = 17;
+        while (true) {
+          const hasGrandTotal = jsonData[row]?.some((cell) =>
+            String(cell).includes("Grand Total (Rp.)"),
+          );
+
+          if (hasGrandTotal) break;
+
+          const isbnBook =
+            getCellValue(row, 2) === "" ||
+            getCellValue(row, 2) === null ||
+            getCellValue(row, 2) === "-"
+              ? "-"
+              : String(getCellValue(row, 2));
+          const qty = getCellValue(row, 3);
+          const price = getCellValue(row, 4);
+          const disc = getCellValue(row, 5);
+
+          if (qty !== "" && price !== "") {
+            const bookName =
+              isbnBook === "-"
+                ? getCellValue(row, 1)
+                : findBooks(isbnBook, books);
+
+            bookList.push({
+              bookName,
+              isbn: isbnBook,
+              qty: qty,
+              price: price,
+              disc: disc ? (parseFloat(disc) * 100).toString() : "",
+            });
+          }
+          row++;
+        }
+
+        // Format date to YYYY-MM-DD for the <input type="date">
+        let formattedDate = "";
+        if (typeof invoiceDate === "number") {
+          const date = new Date(
+            Math.round((invoiceDate - 25569) * 86400 * 1000),
+          );
+          const day = String(date.getDate()).padStart(2, "0");
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const year = date.getFullYear();
+          formattedDate = `${year}-${month}-${day}`;
+        } else if (
+          typeof invoiceDate === "string" &&
+          invoiceDate.includes("/")
+        ) {
+          const parts = invoiceDate.split("/");
+          if (parts.length === 3) {
+            formattedDate = `${parts[2]}-${parts[1].padStart(2, "0")}-${parts[0].padStart(2, "0")}`;
+          } else {
+            formattedDate = invoiceDate;
+          }
+        } else {
+          formattedDate = invoiceDate;
+        }
+
+        setQuotationData((prev) => ({
+          ...prev,
+          serie: invoiceNumber,
+          date: formattedDate,
+          name: customerName.split("-")[0]?.trim() || "",
+          company: customerName.split("-")[1]?.trim() || "",
+          email: email,
+          phone: phone,
+          address: companyAddress,
+          bookList: [...bookList],
+        }));
+      } catch (error) {
+        console.error("Excel Import Error:", error);
+        alert(
+          `Import failed: ${error.message}\n\nPlease ensure you're using the correct template.`,
+        );
+      }
+    };
+
+    reader.onerror = () => {
+      alert("Error reading file. Please try again.");
+    };
+
+    reader.readAsArrayBuffer(file);
+    e.target.value = "";
+  };
+
   const handleBookChange = (index) => (event) => {
     const { name, value } = event.target;
 
@@ -140,8 +267,8 @@ const QuotationEdit = () => {
       if (value === null || value === "" || value === "-") {
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
-        hed.style = "display: none";
-        bame.style = "display: block";
+        if (hed) hed.style = "display: none";
+        if (bame) bame.style = "display: block";
 
         setQuotationData({
           ...quotationData,
@@ -151,14 +278,14 @@ const QuotationEdit = () => {
                   ...book,
                   [name]: value,
                 }
-              : book
+              : book,
           ),
         });
       } else if (selectedBook) {
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
-        hed.style = "display: block";
-        bame.style = "display: none";
+        if (hed) hed.style = "display: block";
+        if (bame) bame.style = "display: none";
 
         setQuotationData({
           ...quotationData,
@@ -171,14 +298,14 @@ const QuotationEdit = () => {
                   isbn: selectedBook.isbn,
                   price: selectedBook.bookPrice,
                 }
-              : book
+              : book,
           ),
         });
       } else if (!selectedBook) {
         const bame = document.getElementById("bame-" + index);
         const hed = document.getElementById("hed-" + index);
-        hed.style = "display: none";
-        bame.style = "display: block";
+        if (hed) hed.style = "display: none";
+        if (bame) bame.style = "display: block";
 
         setQuotationData({
           ...quotationData,
@@ -188,7 +315,7 @@ const QuotationEdit = () => {
                   ...book,
                   [name]: value,
                 }
-              : book
+              : book,
           ),
         });
       }
@@ -201,7 +328,7 @@ const QuotationEdit = () => {
                 ...book,
                 [name]: value,
               }
-            : book
+            : book,
         ),
       });
     }
@@ -231,13 +358,22 @@ const QuotationEdit = () => {
     <>
       <div className="section">
         <div className="section headline">
-          <h4>Add quotation</h4>
+          <h4>Edit Quotation</h4>
           <button onClick={() => navigate(`/quotations`)} className="btn">
             See All quotations
           </button>
         </div>
         <div className="section">
           <form onSubmit={updQuotation} className="form">
+            <div className="field">
+              <label className="label">Import Xlsx</label>
+              <input
+                id="file-upload"
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileImport}
+              />
+            </div>
             <div className="field">
               <label className="label">No.</label>
               <input
@@ -347,8 +483,7 @@ const QuotationEdit = () => {
                     id={`hed-${index}`}
                     name={`isbn`}
                     value={book.isbn}
-                    onChange={handleBookChange(index)}
-                  >
+                    onChange={handleBookChange(index)}>
                     <option value="">--- Select Book ---</option>
                     <option value="-">[Custom Book Name]</option>
                     {books.map((item, i) => (
@@ -418,8 +553,7 @@ const QuotationEdit = () => {
                 <button
                   type="button"
                   className="btn"
-                  onClick={handleRemoveBook}
-                >
+                  onClick={handleRemoveBook}>
                   Remove Book
                 </button>
                 <button type="button" className="btn" onClick={handleAddBook}>
