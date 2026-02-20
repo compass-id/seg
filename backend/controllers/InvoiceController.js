@@ -23,7 +23,7 @@ export const getInvoices = asyncHandler(async (req, res) => {
   try {
     const inv = await Invoice.find()
       .populate("bookList")
-      .sort({ month: -1, serie: -1 });
+      .sort({ date: -1, serie: -1 });
     if (!inv) {
       res.status(404);
       throw new Error(`cannot find any Invoice`);
@@ -40,7 +40,7 @@ export const getInvoiceById = asyncHandler(async (req, res) => {
   try {
     const inv = await Invoice.findById(req.params.id)
       .populate("bookList")
-      .sort({ month: -1, serie: -1 });
+      .sort({ date: -1, serie: -1 });
     if (!inv) {
       res.status(404);
       throw new Error(`cannot find any Invoice id`);
@@ -106,7 +106,7 @@ export const getInvoiceByKey = asyncHandler(async (req, res) => {
           },
         },
       ],
-    }).sort({ month: -1, serie: -1 });
+    }).sort({ date: -1, serie: -1 });
     if (!inv) {
       res.status(404);
       throw new Error(`cannot find any Invoice id`);
