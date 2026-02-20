@@ -209,16 +209,6 @@ const InvoiceList = () => {
     <>
       <div className="section headline">
         <h4>Invoice List</h4>
-        <button
-          onClick={() =>
-            window.open(
-              `https://compasspubindonesia.com/media/api/invoice/export.php?search=${search}`,
-              "_blank",
-            )
-          }
-          className="btn">
-          Print All to Xlsx
-        </button>
         <button onClick={() => navigate(`/invoice-add`)} className="btn">
           Add Invoice
         </button>
@@ -259,6 +249,16 @@ const InvoiceList = () => {
           onClick={() => salesSet("Tulus", "Cahyo", "Angga", "All")}
           id="Tulus">
           Tulus
+        </button>
+        <button
+          onClick={() =>
+            window.open(
+              `https://compasspubindonesia.com/media/api/invoice/export.php?search=${search}`,
+              "_blank",
+            )
+          }
+          className="btn">
+          Print All to Xlsx
         </button>
       </div>
       <div className="section">
