@@ -251,14 +251,22 @@ const InvoiceList = () => {
           Tulus
         </button>
         <button
-          onClick={() =>
+          onClick={() => {
+            // Construct the URL dynamically based ONLY on your existing React states
+            const queryParams = new URLSearchParams({
+              search: search || "",
+              start: customRange?.start || "",
+              end: customRange?.end || "",
+            }).toString();
+
+            // Open the export URL
             window.open(
-              `https://compasspubindonesia.com/media/api/invoice/export.php?search=${search}`,
+              `https://compasspubindonesia.com/media/api/invoice/export.php?${queryParams}`,
               "_blank",
-            )
-          }
+            );
+          }}
           className="active">
-          Print All to Xlsx
+          Export Xlsx
         </button>
       </div>
       <div className="section">
