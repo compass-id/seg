@@ -21,9 +21,7 @@ export const setInvoice = asyncHandler(async (req, res) => {
 // get all inv
 export const getInvoices = asyncHandler(async (req, res) => {
   try {
-    const inv = await Invoice.find()
-      .populate("bookList")
-      .sort({ date: -1, serie: -1 });
+    const inv = await Invoice.find().populate("bookList").sort({ serie: -1 });
     if (!inv) {
       res.status(404);
       throw new Error(`cannot find any Invoice`);
@@ -40,7 +38,7 @@ export const getInvoiceById = asyncHandler(async (req, res) => {
   try {
     const inv = await Invoice.findById(req.params.id)
       .populate("bookList")
-      .sort({ date: -1, serie: -1 });
+      .sort({ serie: -1 });
     if (!inv) {
       res.status(404);
       throw new Error(`cannot find any Invoice id`);
@@ -106,7 +104,7 @@ export const getInvoiceByKey = asyncHandler(async (req, res) => {
           },
         },
       ],
-    }).sort({ date: -1, serie: -1 });
+    }).sort({ serie: -1 });
     if (!inv) {
       res.status(404);
       throw new Error(`cannot find any Invoice id`);
@@ -124,7 +122,7 @@ export const updInvoice = asyncHandler(async (req, res) => {
     const inv = await Invoice.findByIdAndUpdate(
       { _id: req.params.id },
       req.body,
-      { new: true } // exclude file field
+      { new: true }, // exclude file field
     );
     if (!inv) {
       res.status(404);
